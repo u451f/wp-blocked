@@ -1,6 +1,8 @@
 <?php
 class BlockedUrl {
 
+    const VERSION = "0.0.4";
+
     public  $api_key;
     public  $api_email;
     public  $url;
