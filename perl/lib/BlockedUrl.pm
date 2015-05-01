@@ -53,6 +53,9 @@ Minimal URL submit/status implementation of Censorship Monitoring Project API
 	# 		...
 	# 	]
 	
+=head1 SSL Warning!
+
+Currently, SSL_verify_mode is set to SSL_VERIFY_NONE, so we currently cannot be sure of who we're talking to. 
 
 =head1 METHODS
 
@@ -62,8 +65,7 @@ Sets/gets the URL to check
 
 =head2 push_request()
 
-Performs a push of the instance's url to the network. Currently, SSL_verify_mode is set to SSL_VERIFY_NONE, so we
-cannot currently be sure of who we're talking to. Results can be retrieved from push_response().
+Performs a push of the instance's url to the network. Results can be retrieved from push_response().
 
 Returns self, dies on all errors.
 
@@ -87,6 +89,7 @@ returnse the parsed JSON answer of last successful get_status()
 use Moose;
 use LWP::UserAgent;
 use HTTP::Request::Common;
+# See: https://metacpan.org/pod/Furl#HTTPS-requests-claims-warnings
 use IO::Socket::SSL; # Thanks to Furl library to detail on this
 use Digest::SHA;
 use JSON::XS;
