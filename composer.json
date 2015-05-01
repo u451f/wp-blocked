@@ -1,0 +1,33 @@
+{
+    "name": "u451f/wp-blocked",
+    "description": "Wordpress Plugin for Censorship Monitoring Project",
+    "keywords": [],
+    "homepage": "https://github.com/u451f/wp-blocked",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Gutsch",
+            "email": "mg@gutsch.it",
+            "homepage": "http://gutsch.it/"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "guzzlehttp/guzzle": ">=5.1.0"
+    },
+    "require-dev": {
+        //"phpunit/phpunit": "3.7.*"
+    },
+    "suggest": {
+        "ext-curl": "*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": {
+            "Buzz": "lib/"
+        }
+    }
+}
