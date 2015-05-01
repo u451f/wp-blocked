@@ -22,18 +22,26 @@ class BlockedUrl {
         return $this->_status_response;
     }
     
-    // HELPERS
+    // PUBLIC HELPERS 
     
-    private function make_signature( $url ) {
-        // return Digest::SHA::hmac_sha512_hex( $url, $self->api_key );
+    public function make_signature( $url ) {
+        return hash_hmac('sha512', $url, $this->api_key );
     }
 
-    private function make_get_query_url( $url, $params ) {
-        //my ( $self, $url, %params ) = @_;
-        //return $url . '?' . join('&', 
-        //    map  { $_ . '=' . $params{$_} }
-        //    keys %params 
-        //)
+    public function make_get_query_url( $url, $params ) {
+        // TODO: find out how to use map() in PHP ;-)
+        $query_url = $url;
+        $has_looped = false;
+        foreach( $params as $key => $value ){
+            $separator = '&';
+            if ( ! $has_looped ){
+                $separator = '?';
+                $has_looped = true;    
+            }
+            $query_url = $query_url . $separator . $key . '=' . $value;
+            
+        }
+        return $query_url;
     }
     
     // PUBLIC API
