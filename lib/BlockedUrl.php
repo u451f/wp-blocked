@@ -1,6 +1,8 @@
 <?php
-class BlockedUrl {
+require_once "CurlWrapper.php";
 
+class BlockedUrl {
+    
     const VERSION = "0.0.4";
 
     public  $api_key;
@@ -57,23 +59,24 @@ class BlockedUrl {
     }
     
     public function push_request() {
-        //my $request = POST(
-        //    $self->url_submit,
-        //    Content_Type => 'form-data',
-        //    Content      => [	
-        //        email     => $self->api_email,
-        //        url       => $self->url,
-        //        signature => $self->make_signature( $self->url ),
-        //    ]
-        //);
-        //my $response = $self->user_agent->request( $request );
-        //if ( $response->is_success ){
-        //    $self->push_response( JSON::XS->new->decode( $response->content ) );
-        //    return $self;
-        //}
-        //else {
-        //    die 'Push request failed with  ' . $response->code . ' - '  . $response->message;
-        //}
+        
+        $json = CurlWrapper::curl_post(
+            $this->url_submit,
+            array(
+                "email"     => $this->api_email,
+                "url"       => $this->url,
+                "signature" => $this->make_signature( $this->url ),
+            ),
+            array(
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => false,
+            )
+            
+        );
+        
+        $this->_push_response = json_decode( $json, true );
+        return $this;
+        
     }
         
     public function get_status() {
