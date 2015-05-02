@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . "/CurlWrapper.php";
 
 class BlockedUrl {
     
-    const VERSION = "0.0.4";
+    const VERSION = "0.2.1";
 
     public  $api_key;
     public  $api_email;
