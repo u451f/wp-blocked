@@ -1,5 +1,5 @@
 NAME
-    BlockedURL
+    BlockedUrl
 
 VERSION
     0.1.0
