@@ -1,5 +1,5 @@
 <?php
-require_once "CurlWrapper.php";
+require_once dirname(__FILE__) . "/CurlWrapper.php";
 
 class BlockedUrl {
     
