@@ -11,8 +11,6 @@ class BlockedUrl {
     private $_push_response;
     private $_status_response;
     
-    private $user_agent; 
-    
     private $url_submit = 'https://213.108.108.176/1.2/submit/url';
     private $url_status = 'https://213.108.108.176/1.2/status/url';
     
