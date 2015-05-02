@@ -80,28 +80,36 @@ class BlockedUrl {
     }
         
     public function get_status() {
-        //my $request = GET(
-        //    $self->make_get_query_url( 
-        //        $self->url_status, (
-        //            email     => $self->api_email,
-        //            url       => $self->url,
-        //            signature => $self->make_signature( $self->url ),
-        //        )
-        //    ),
-        //);
-        //my $response = $self->user_agent->request( $request );
-        //if ( $response->is_success ){
-        //    $self->status_response( JSON::XS->new->decode( $response->content ) );
-        //    return $self;
-        //}
-        //elsif ( $response->code == 404) {
-        //    # not in DB, try to push first
-        //    warn 'Status request failed with  ' . $response->code . ' - '  . $response->message . '; trying to push first';
-        //    return $self->push_request->get_status;
-        //}
-        //else {
-        //    die 'Status request failed with  ' . $response->code . ' - '  . $response->message . '; trying to push first';
-        //}
+        
+        $json = CurlWrapper::curl_get(
+            $this->url_status,
+            array(
+                "email"     => $this->api_email,
+                "url"       => $this->url,
+                "signature" => $this->make_signature( $this->url ),
+            ),
+            array(
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => false,
+            )
+        );
+        
+        $response = json_decode( $json, true );
+        
+        if ( $response["success"] ){
+            $this->_status_response = $response;
+            return $this;
+        }
+        
+        if( ! $response["success"] ) {
+            if ( preg_match( 'No matches in DB', $response["error"] ) ){
+                // try to push first, then retry getting status
+                return $this->push_request()->get_status();
+            }
+        }
+        
+        throw new Exception('Unhandled get_status error! Server returned: "' . $json );
+        
     }
    
 }
