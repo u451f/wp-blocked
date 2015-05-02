@@ -8,7 +8,7 @@ BlockedURL
 
 =head1 VERSION
 
-0.1.0
+0.2.3
 
 =head1 DESCRIPTION
 

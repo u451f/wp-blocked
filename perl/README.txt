@@ -2,7 +2,7 @@ NAME
     BlockedUrl
 
 VERSION
-    0.1.0
+    0.2.3
 
 DESCRIPTION
     Minimal URL submit/status implementation of Censorship Monitoring
