@@ -60,7 +60,7 @@ class BlockedUrl {
     
     public function push_request() {
         
-        $json = CurlWrapper::curl_post(
+        $response = CurlWrapper::curl_post(
             $this->url_submit,
             array(
                 "email"     => $this->api_email,
@@ -74,14 +74,21 @@ class BlockedUrl {
             
         );
         
-        $this->_push_response = json_decode( $json, true );
-        return $this;
+        if ( $response["error"] ) {
+            throw new Exception( 'push_request failed to call to curl with: ' . $error);
+        }
+        if ( $response["status"] == 201 ){
+            $this->_push_response = json_decode( $response["body"], true );
+            return $this;
+        }
+        
+        throw new Exception('push_request failed with status ' . $response["status"] . ' - ' . $response["body"] );        
         
     }
         
     public function get_status() {
         
-        $json = CurlWrapper::curl_get(
+        $response = CurlWrapper::curl_get(
             $this->url_status,
             array(
                 "email"     => $this->api_email,
@@ -94,18 +101,16 @@ class BlockedUrl {
             )
         );
         
-        $response = json_decode( $json, true );
-        
-        if ( $response["success"] ){
-            $this->_status_response = $response;
-            return $this;
+        if ( $response["error"] ){
+            throw new Exception( 'get_status failed to call to curl with: ' . $error);
         }
-        
-        if( ! $response["success"] ) {
-            if ( preg_match( 'No matches in DB', $response["error"] ) ){
-                // try to push first, then retry getting status
-                return $this->push_request()->get_status();
-            }
+        if( $response["status"] == 404 ) {
+            // try to push first, then retry getting status
+            return $this->push_request()->get_status();
+        }
+        if ( $response["status"] == 200 ){
+            $this->_status_response = json_decode( $response["body"], true );
+            return $this;
         }
         
         throw new Exception('Unhandled get_status error! Server returned: "' . $json );
