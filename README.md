@@ -2,26 +2,93 @@
 
 A wordpress plugin to check for blocked URLs. Depends on php-lib-blocked-url (included).
 
-# Components
+# BlockedUrl
 
-## perl BlockedUrl
+A simple library that lets you submit URLs to it and fetch a result later. Implemented in Perl and PHP.
 
-A simple Perl library that lets you submit URLs to it and fetch a result later.
+- - -
+# Documentation
 
-## php BlockedURL
+## NAME
 
-A PHP port of the Perl library above. It's been done this way as the author knows Perl way better than PHP. Porting is simpler than implementing. I may be wrong.
+BlockedUrl
 
-### php Documentation
+## VERSION
 
-Currently, see [perl/README.txt](https://github.com/u451f/wp-blocked/blob/master/perl/README.txt).
+0.2.1 
 
-### php Synopsis (draft)
+## DESCRIPTION
 
-Will look pretty much the same as the perl one, except for named parameters in the constructer which aren't supported here:
+Minimal URL submit/status implementation of Censorship Monitoring
+Project API
 
-	var $blocked_url = new BlockedUrl("<API_KEY>", "<API_EMAIL>", "<URL>");
-	$blocked_url->push_request();    // sends URL to network (or fails)
-	$blocked_url->push_response();   // returns parsed JSON response
-	$blocked_url->get_status();      // tries to fetch response from network
-	$blocked_url->status_response(); // returns status for URL (if has_status is true)
+## SYNOPSIS
+    require "lib/BlockedUrl.php";
+
+    $blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>' );
+    $blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>', false ); // disable SSL peer verification
+
+    // push your URL to network, and fetch response
+    my $pushed = $blocked->push_request()->push_response();
+
+    // yields:
+    // array(
+    //       "hash"    => string,
+    //       "queued"  => bool,
+    //       "success" => bool,
+    //       "uuid"    => int
+    // )
+
+    // retrieve URL status
+    $status = $blocked->get_status()->status_response();     
+
+    // yields:
+    // array(
+    //       "url-status" => string( "ok"|"blocked" ),
+    //       "categories" => array( string ),
+    //       "results"    => array( 
+    //            blocktype               => 'what',
+    //            category                => 'ever',
+    //            first_blocked_timestamp => '2015-03-19 12:39:48',
+    //            last_blocked_timestamp  => '2015-03-19 12:39:48',
+    //            network_name            => 'Fake ISP Ltd',
+    //            status                  => 'ok',
+    //            status_timestamp        => '2015-04-30 22:46:54'
+    //               ...
+    //       )
+    // )
+
+## METHODS
+
+### constructor( string $api_key, string, $api_email, string $url, boolean $ssl_verification = true )
+
+$api_key, $api_email and the $url are mandatory parameters. Set
+$ssl_verification to false if you wish to call to hosts with self-signed SSL certificates.
+
+### url( <string> )
+
+Sets/gets the URL to check.
+
+### push_request()
+
+Performs a push of the instance's url to the network. Results can be retrieved
+from push_response().
+
+Returns $this, throws exception on all errors.
+
+### push_response()
+
+Returns the parsed JSON answer of last successful push_request()
+
+### get_status()
+
+Tries to get the status for current URL from network. If this fails with
+a 404 status it tries to push the URL to the network first, then
+retries. Result can be retrieved from status_response().
+
+Returns $this, throws exception on all other errors.
+
+### status_response()
+
+Returns the parsed JSON answer of last successful get_status()
+
