@@ -14,6 +14,8 @@ class BlockedUrl {
     private $url_submit = 'https://213.108.108.176/1.2/submit/url';
     private $url_status = 'https://213.108.108.176/1.2/status/url';
     
+    private $verify_ssl;
+    
     // GETTERS
     
     public function push_response() {
@@ -46,14 +48,25 @@ class BlockedUrl {
         return $query_url;
     }
     
+    private function curl_opts(){
+        if ( ! $this->verify_ssl ){
+            return array(
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => false
+            );
+        }
+        return array();
+    }
+    
     // PUBLIC API
-    public function __construct( $api_key, $api_email, $url ) {
+    public function __construct( $api_key, $api_email, $url, $verify_ssl = true ) {
         if ( ! ( $api_key && $api_email && $url ) ){
             throw new Exception('Usage: "new BlockedUrl( <API-KEY>, <API-EMAIL>, <URL>);"');
         }
-        $this->api_key   = $api_key;
-        $this->api_email = $api_email;
-        $this->url       = $url;
+        $this->api_key    = $api_key;
+        $this->api_email  = $api_email;
+        $this->url        = $url;
+        $this->verify_ssl = $verify_ssl;
     }
     
     public function push_request() {
@@ -65,10 +78,7 @@ class BlockedUrl {
                 "url"       => $this->url,
                 "signature" => $this->make_signature( $this->url ),
             ),
-            array(
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYPEER => false,
-            )
+            $this->curl_opts()
             
         );
         
@@ -93,14 +103,11 @@ class BlockedUrl {
                 "url"       => $this->url,
                 "signature" => $this->make_signature( $this->url ),
             ),
-            array(
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYPEER => false,
-            )
+            $this->curl_opts()
         );
         
         if ( $response["error"] ){
-            throw new Exception( 'get_status failed to call to curl with: ' . $error);
+            throw new Exception( 'get_status failed to call to curl with: ' . $response["error"] );
         }
         if( $response["status"] == 404 ) {
             // try to push first, then retry getting status
