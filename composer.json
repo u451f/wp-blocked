@@ -13,8 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "mashape/unirest-php": "^2.6"
+        "php": ">=5.4.0"
     },
     "require-dev": {
     },
