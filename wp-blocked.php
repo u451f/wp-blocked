@@ -26,14 +26,17 @@ License: GPL2+
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require "lib/BlockedUrl.php";
 
-function show_results() {
-	$blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>' );
-	$blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>', false ); // disable SSL peer verification
+	require_once "lib/BlockedUrl.php";
+function show_results($URL, $SSL=false) {
+
+	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS
+	require_once "secret-test.php"; 
+	$blocked = new BlockedUrl( $API_KEY, $API_EMAIL, $URL, $SSL, $URL_SUBMIT, $URL_STATUS ); // false = disable SSL peer verification
 
 	// push your URL to network, and fetch response
 	$pushed = $blocked->push_request()->push_response();
+	print_r($pushed);
 
 	// yields:
 	// array(
@@ -45,6 +48,7 @@ function show_results() {
 
 	// retrieve URL status
 	$status = $blocked->get_status()->status_response();
+	print_r($status);
 
 	// yields:
 	// array(
@@ -63,9 +67,18 @@ function show_results() {
 	// )
 }
 
+// simply check for given equals expected and print fail or success messages
+function assert_equal( $given, $expected, $message ){
+    if( $given === $expected ){
+        echo $message . " - SUCCESS \n";
+    }
+    else {
+        echo $message . " - FAIL, (given: " . $given . ", expected: " . $expected . ") \n";
+    }
+}
 
 // todo: create shortcode for query form and result
+show_results('http://twitter.com');
 
 // todo: create configuration page where we can translate 5 results: ok, blocked, error, dns-error, timeout
-
 ?>
