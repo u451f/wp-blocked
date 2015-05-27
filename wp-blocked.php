@@ -170,18 +170,17 @@ class wpBlockedSettingsPage {
             array( $this, 'print_section_info' ), // Callback
             'wp-blocked-settings' // Page
         );
-
-        add_settings_field(
-            'API_KEY',
-            'API Key',
-            array( $this, 'api_key_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_general'
-        );
         add_settings_field(
             'API_EMAIL',
             'API Email',
             array( $this, 'api_email_callback' ),
+            'wp-blocked-settings',
+            'wp_blocked_section_general'
+        );
+        add_settings_field(
+            'API_KEY',
+            'API Key',
+            array( $this, 'api_key_callback' ),
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
