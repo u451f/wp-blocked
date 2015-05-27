@@ -10,7 +10,8 @@ class CurlWrapper {
     * @param array $options for cURL 
     * @return array( code => $code, body => $body, error => $error, header => $header )
     */ 
-    function curl_post($url, array $post = NULL, array $options = array()) { 
+    function curl_post($url, array $post = NULL, array $options = array()) {
+        // set curl options for POST request as defaults
         $defaults = array( 
             CURLOPT_POST           => 1, 
             CURLOPT_HEADER         => true, 
@@ -21,6 +22,8 @@ class CurlWrapper {
             CURLOPT_TIMEOUT        => 10, 
             CURLOPT_POSTFIELDS     => http_build_query($post) 
         );
+        // send our options above ($defaults) and options from user ($options)
+        // to curl_process which actually performs the HTTP request
         return CurlWrapper::curl_process( $options, $defaults );    
     }
 
@@ -32,27 +35,29 @@ class CurlWrapper {
     * @return string 
     */ 
     function curl_get($url, array $get = NULL, array $options = array()) {    
+        // simple GET request options for curl
         $defaults = array( 
             CURLOPT_URL => $url. (strpos($url, '?') === FALSE ? '?' : ''). http_build_query($get), 
             CURLOPT_HEADER => 1, 
             CURLOPT_RETURNTRANSFER => TRUE, 
             CURLOPT_TIMEOUT => 4 
         );
-        
         return CurlWrapper::curl_process( $options, $defaults );    
-
     }     
     
     function curl_process( $options, $defaults ){
         
-        $handle = curl_init(); 
-        curl_setopt_array( $handle, ($options + $defaults)); 
+        // create curl handle
+        $handle = curl_init();
+        
 
-        $response = curl_exec( $handle);
-        $error    = curl_error( $handle);
-        $info     = curl_getinfo( $handle );
+        // here comes the manic curl API of PHP
+        curl_setopt_array( $handle, ($options + $defaults)); // set options  
+        $response = curl_exec(    $handle );  // call curl
+        $error    = curl_error(   $handle );  // catch errors
+        $info     = curl_getinfo( $handle );  // catch request info (header size)
 
-        curl_close($handle);
+        curl_close( $handle );
         
         // Split the full response in its headers and body
         $header_size = $info['header_size'];

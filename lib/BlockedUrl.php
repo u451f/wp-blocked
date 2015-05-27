@@ -8,12 +8,11 @@ class BlockedUrl {
     public  $api_key;
     public  $api_email;
     public  $url;
+    public $url_submit;
+    public $url_status;
+
     private $_push_response;
     private $_status_response;
-    
-    private $url_submit = 'https://213.108.108.176/1.2/submit/url';
-    private $url_status = 'https://213.108.108.176/1.2/status/url';
-    
     private $verify_ssl;
     
     // GETTERS
@@ -59,7 +58,7 @@ class BlockedUrl {
     }
     
     // PUBLIC API
-    public function __construct( $api_key, $api_email, $url, $verify_ssl = true ) {
+    public function __construct( $api_key, $api_email, $url, $verify_ssl = true, $url_submit, $url_status ) {
         if ( ! ( $api_key && $api_email && $url ) ){
             throw new Exception('Usage: "new BlockedUrl( <API-KEY>, <API-EMAIL>, <URL>);"');
         }
@@ -67,6 +66,8 @@ class BlockedUrl {
         $this->api_email  = $api_email;
         $this->url        = $url;
         $this->verify_ssl = $verify_ssl;
+    	$this->url_submit = $url_submit;
+        $this->url_status = $url_status;
     }
     
     public function push_request() {
@@ -83,14 +84,14 @@ class BlockedUrl {
         );
         
         if ( $response["error"] ) {
-            throw new Exception( 'push_request failed to call to curl with: ' . $error);
+            throw new Exception( "push_request failed to call to curl with: " . $response['error']);
         }
         if ( $response["status"] == 201 ){
             $this->_push_response = json_decode( $response["body"], true );
             return $this;
         }
         
-        throw new Exception('push_request failed with status ' . $response["status"] . ' - ' . $response["body"] );        
+        throw new Exception("push_request failed with status " . $response['status'] . " - " . $response['body'] );        
         
     }
         
@@ -107,18 +108,18 @@ class BlockedUrl {
         );
         
         if ( $response["error"] ){
-            throw new Exception( 'get_status failed to call to curl with: ' . $response["error"] );
+            throw new Exception( "get_status failed to call to curl with: " . $response['error'] );
         }
         if( $response["status"] == 404 ) {
             // try to push first, then retry getting status
             return $this->push_request()->get_status();
         }
         if ( $response["status"] == 200 ){
-            $this->_status_response = json_decode( $response["body"], true );
+            $this->_status_response = json_decode( $response['body'], true );
             return $this;
         }
         
-        throw new Exception('Unhandled get_status error! Server returned: "' . $json );
+        throw new Exception("Unhandled get_status error! Server returned: " . $json );
         
     }
    
