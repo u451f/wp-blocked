@@ -7,12 +7,14 @@ SYNOPIS
 
 $API_KEY;
 $API_EMAIL;
-require "secret-test.php"; // load $API_KEY and $API_EMAIL or set above
+$URL_SUBMIT;
+$URL_STATUS;
+require "secret-test.php"; // load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS or set above
 
 require "lib/BlockedUrl.php";
 
 // oh yeah, gloabls.
-$b = new BlockedUrl( $API_KEY, $API_EMAIL, 'http://twitter.com', false );
+$b = new BlockedUrl( $API_KEY, $API_EMAIL, 'http://twitter.com', false, $URL_SUBMIT, $URL_STATUS );
 
 // simply check for given equals excepted and print some fail/success messages
 function assert_equal( $given, $expected, $message ){
@@ -35,5 +37,4 @@ $result = $b->get_status()->status_response();
 assert_equal( $result["success"], true, "get_status" );
 assert_equal( $result["url"], 'http://twitter.com', "twitter URL" );
 assert_equal( count( $result["results"] ) > 0, true, "there are results in here" );
-
 ?>
