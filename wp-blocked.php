@@ -31,8 +31,6 @@ Domain Path: /languages/
 require_once "lib/wp-l10n.php";
 require_once "lib/BlockedUrl.php";
 
-// todo: check requirements: is php-curl installed?
-
 /* l10n */
 function wp_blocked_init() {
 	 $plugin_dir = basename(dirname(__FILE__));
@@ -98,7 +96,7 @@ function show_results($URL, $SSL=false) {
 // create a shortcode which will insert a form [blocked_test_url]
 // todo : treat the result
 function wp_blocked_url_shortcode() {
-       echo '<form method="POST"><input type="url" value="" name="wp_blocked_url" /><input type="submit" value="send" class="submit" /></form>';
+       echo '<form method="POST"><input type="url" value="" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
@@ -172,18 +170,17 @@ class wpBlockedSettingsPage {
             array( $this, 'print_section_info' ), // Callback
             'wp-blocked-settings' // Page
         );
-
-        add_settings_field(
-            'API_KEY',
-            'API Key',
-            array( $this, 'api_key_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_general'
-        );
         add_settings_field(
             'API_EMAIL',
             'API Email',
             array( $this, 'api_email_callback' ),
+            'wp-blocked-settings',
+            'wp_blocked_section_general'
+        );
+        add_settings_field(
+            'API_KEY',
+            'API Key',
+            array( $this, 'api_key_callback' ),
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
@@ -252,35 +249,35 @@ class wpBlockedSettingsPage {
 
     public function api_email_callback() {
         printf(
-            '<input type="text" id="API_EMAIL" name="wp_blocked_option_name[API_EMAIL]" value="%s" class="regular-text ltr" />',
+            '<input type="text" id="API_EMAIL" name="wp_blocked_option_name[API_EMAIL]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['API_EMAIL'])
         );
     }
     
 	public function api_key_callback() {
         printf(
-            '<input type="text" id="API_KEY" name="wp_blocked_option_name[API_KEY]" value="%s" class="regular-text ltr" />',
+            '<input type="text" id="API_KEY" name="wp_blocked_option_name[API_KEY]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['API_KEY'])
         );
     }
 
     public function url_submit_callback() {
         printf(
-            '<input type="url" id="URL_SUBMIT" name="wp_blocked_option_name[URL_SUBMIT]" value="%s" class="regular-text ltr" />',
+            '<input type="url" id="URL_SUBMIT" name="wp_blocked_option_name[URL_SUBMIT]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['URL_SUBMIT'])
         );
     }
 
     public function url_status_callback() {
         printf(
-            '<input type="url" id="URL_STATUS" name="wp_blocked_option_name[URL_STATUS]" value="%s" class="regular-text ltr" />',
+            '<input type="url" id="URL_STATUS" name="wp_blocked_option_name[URL_STATUS]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['URL_STATUS'])
         );
     }
 
     public function languages_status_callback() {
         printf(
-            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" />',
+            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['languages'])
         );
     }
@@ -288,4 +285,4 @@ class wpBlockedSettingsPage {
 
 if( is_admin() )
     $wp_blocked_settings_page = new wpBlockedSettingsPage();
-?>
+	?>
