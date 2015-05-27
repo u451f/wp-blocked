@@ -84,16 +84,6 @@ function show_results($URL, $SSL=false) {
 	$status_timeout = __('timeout', 'wp-blocked');
 }
 
-// simply check for given equals expected and print fail or success messages
-function assert_equal( $given, $expected, $message ){
-    if( $given === $expected ){
-        echo $message . " - SUCCESS \n";
-    }
-    else {
-        echo $message . " - FAIL, (given: " . $given . ", expected: " . $expected . ") \n";
-    }
-}
-
 // create a shortcode which will insert a form [blocked_test_url]
 // todo : treat the result
 function wp_blocked_url_shortcode() {
