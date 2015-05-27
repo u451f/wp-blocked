@@ -105,7 +105,7 @@ function show_results($URL, $SSL=false) {
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
 	// todo : see what action="" should be
-    echo '<form method="POST"><input type="url" value="" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+    echo '<form method="POST"><input  placeholder="'. __('Enter URL to test if it is blocked').'" type="url" value="" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
