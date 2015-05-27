@@ -106,7 +106,7 @@ function show_results($URL, $SSL=false) {
 function wp_blocked_url_shortcode() {
 	// todo : see what action="" should be
 	if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
-    echo '<form method="POST"><input  placeholder="'. __('Enter URL to test if it is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+    echo '<form method="POST"><input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
