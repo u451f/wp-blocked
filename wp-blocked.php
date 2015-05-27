@@ -190,6 +190,13 @@ class wpBlockedSettingsPage {
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
+        add_settings_field(
+            'languages',
+            'Languages (separated by comma, use international abbreviations (ie. "fr" for french, "ar" for arabic.)',
+            array( $this, 'languages_status_callback' ),
+            'wp-blocked-settings',
+            'wp_blocked_section_general'
+        );
     }
 
     /**
@@ -207,6 +214,17 @@ class wpBlockedSettingsPage {
             $input['URL_SUBMIT'] = esc_url( $input['URL_SUBMIT'] );
         if( !empty( $input['URL_STATUS'] ) )
             $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
+        if( !empty( $input['languages'] ) )
+            $input['languages'] = sanitize_text_field(str_replace( ';', ',', $input['languages'] ));
+            $tmplanguages = explode( ',', $input['languages'] );
+            foreach($tmplanguages as $language) {
+                $tmp = sanitize_text_field( $language );
+                if(!empty($tmp)) {
+                    $clean_languages[] = $tmp;
+                }
+            }
+            $input['languages'] = implode(',', $clean_languages);
+		}
         return $input;
     }
 
@@ -246,6 +264,13 @@ class wpBlockedSettingsPage {
         printf(
             '<input type="url" id="URL_STATUS" name="wp_blocked_option_name[URL_STATUS]" value="%s" class="regular-text ltr" />',
             esc_attr( $this->options['URL_STATUS'])
+        );
+    }
+
+    public function languages_status_callback() {
+        printf(
+            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" />',
+            esc_attr( $this->options['languages'])
         );
     }
 }
