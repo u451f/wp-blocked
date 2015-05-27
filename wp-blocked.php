@@ -49,7 +49,7 @@ function show_results($URL, $SSL=false) {
 	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via WP options
 	$options = get_option('wp_blocked_option_name');
 
-	if(!isset($options['API_KEY']) OR !isset($options['API_EMAIL']) OR !isset($options['URL_SUBMIT']) OR !isset($options['URL_STATUS'])) {
+	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['URL_SUBMIT']) OR empty($options['URL_STATUS'])) {
 		// throw error
 		echo __("Missing options.", 'wp-blocked');
 	} else {
@@ -103,7 +103,7 @@ function wp_blocked_url_shortcode() {
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
 // todo: tmp tester
-show_results('http://twitter.com');
+show_results('http://thepiratebay.se');
 
 // Create configuration page where we can translate 5 results: ok, blocked, error, dns-error, timeout
 class wpBlockedSettingsPage {
