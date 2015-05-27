@@ -75,6 +75,13 @@ function show_results($URL, $SSL=false) {
 	//               ...
 	//       )
 	// )
+
+	// possible results and their translation
+	$status_blocked = __('blocked', 'wp-blocked');
+	$status_ok = __('ok', 'wp-blocked');
+	$status_error = __('error', 'wp-blocked');
+	$status_dns_error = __('DNS error', 'wp-blocked');
+	$status_timeout = __('timeout', 'wp-blocked');
 }
 
 // simply check for given equals expected and print fail or success messages
@@ -165,13 +172,6 @@ class wpBlockedSettingsPage {
             'wp-blocked-settings' // Page
         );
 
-        add_settings_section(
-            'wp_blocked_section_l10n', // ID
-            'WP Blocked Translations', // Title
-            array( $this, 'print_section_info' ), // Callback
-            'wp-blocked-settings' // Page
-        );
-
         add_settings_field(
             'API_KEY',
             'API Key',
@@ -200,41 +200,6 @@ class wpBlockedSettingsPage {
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
-        add_settings_field(
-            'l10n_blocked',
-            'Translation for "blocked"',
-            array( $this, 'l10n_blocked_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_l10n'
-        );
-        add_settings_field(
-            'l10n_ok',
-            'Translation for "ok"',
-            array( $this, 'l10n_ok_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_l10n'
-        );
-        add_settings_field(
-            'l10n_dns_error',
-            'Translation for "DNS Error"',
-            array( $this, 'l10n_dns_error_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_l10n'
-        );
-        add_settings_field(
-            'l10n_error',
-            'Translation for "error"',
-            array( $this, 'l10n_error_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_l10n'
-        );
-        add_settings_field(
-            'l10n_timeout',
-            'Translation for "timeout"',
-            array( $this, 'l10n_timeout_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_l10n'
-        );
     }
 
     /**
@@ -252,18 +217,6 @@ class wpBlockedSettingsPage {
             $input['URL_SUBMIT'] = esc_url( $input['URL_SUBMIT'] );
         if( !empty( $input['URL_STATUS'] ) )
             $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
-
-        if( !empty( $input['l10n_blocked'] ) )
-            $input['l10n_blocked'] = sanitize_text_field( $input['l10n_blocked'] );
-        if( !empty( $input['l10n_ok'] ) )
-            $input['l10n_ok'] = sanitize_text_field( $input['l10n_ok'] );
-        if( !empty( $input['l10n_error'] ) )
-            $input['l10n_error'] = sanitize_text_field( $input['l10n_error'] );
-        if( !empty( $input['l10n_dns_error'] ) )
-            $input['l10n_dns_error'] = sanitize_text_field( $input['l10n_dns_error'] );
-        if( !empty( $input['l10n_timeout'] ) )
-            $input['l10n_timeout'] = sanitize_text_field( $input['l10n_timeout'] );
-
         return $input;
     }
 
@@ -305,42 +258,6 @@ class wpBlockedSettingsPage {
             esc_attr( $this->options['URL_STATUS'])
         );
     }
-
-    public function l10n_blocked_callback() {
-        printf(
-            '<input type="text" id="l10n_blocked" name="wp_blocked_option_name[l10n_blocked]" value="%s" class="regular-text ltr" />',
-            esc_attr( $this->options['l10n_blocked'])
-        );
-    }
-
-    public function l10n_ok_callback() {
-        printf(
-            '<input type="text" id="l10n_ok" name="wp_blocked_option_name[l10n_ok]" value="%s" class="regular-text ltr" />',
-            esc_attr( $this->options['l10n_ok'])
-        );
-    }
-
-    public function l10n_error_callback() {
-        printf(
-            '<input type="text" id="l10n_error" name="wp_blocked_option_name[l10n_error]" value="%s" class="regular-text ltr" />',
-            esc_attr( $this->options['l10n_error'])
-        );
-    }
-
-    public function l10n_dns_error_callback() {
-        printf(
-            '<input type="text" id="l10n_dns_error" name="wp_blocked_option_name[l10n_dns_error]" value="%s" class="regular-text ltr" />',
-            esc_attr( $this->options['l10n_dns_error'])
-        );
-    }
-
-    public function l10n_timeout_callback() {
-        printf(
-            '<input type="text" id="l10n_timeout" name="wp_blocked_option_name[l10n_timeout]" value="%s" class="regular-text ltr" />',
-            esc_attr( $this->options['l10n_timeout'])
-        );
-    }
-
 }
 
 if( is_admin() )
