@@ -7,6 +7,8 @@ Version: 1.0
 Author: Ulrike Uhlig, Martin Gutsch
 Author URI: http://curlybracket.net
 License: GPL2+
+Text Domain: wp-blocked 
+Domain Path: /languages/
 */
 
 /*
@@ -26,8 +28,14 @@ License: GPL2+
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/* l10n */
+function wp_blocked_init() {
+	 $plugin_dir = basename(dirname(__FILE__));
+	 load_plugin_textdomain( 'wp-blocked', false, "$plugin_dir/languages" );
+}
+add_action('plugins_loaded', 'wp-blocked_init');
 
-	require_once "lib/BlockedUrl.php";
+require_once "lib/BlockedUrl.php";
 function show_results($URL, $SSL=false) {
 
 	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS
