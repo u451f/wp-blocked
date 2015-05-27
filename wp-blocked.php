@@ -46,46 +46,51 @@ function show_results($URL, $SSL=false) {
 	
 	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via WP options
 	$options = get_option('wp_blocked_option_name');
-	$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $SSL, $options['URL_SUBMIT'], $options['URL_STATUS'] ); // false = disable SSL peer verification
 
-	// push your URL to network, and fetch response
-	$pushed = $blocked->push_request()->push_response();
-	print_r($pushed);
+	if(!isset($options['API_KEY']) OR !isset($options['API_EMAIL']) OR !isset($options['URL_SUBMIT']) OR !isset($options['URL_STATUS'])) {
+		// throw error
+		echo __("Missing options.", 'wp-blocked');
+	} else {
+		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $SSL, $options['URL_SUBMIT'], $options['URL_STATUS'] ); // false = disable SSL peer verification
+		// push your URL to network, and fetch response
+		$pushed = $blocked->push_request()->push_response();
+		print_r($pushed);
 
-	// yields:
-	// array(
-	//       "hash"    => string,
-	//       "queued"  => bool,
-	//       "success" => bool,
-	//       "uuid"    => int
-	// )
+		// yields:
+		// array(
+		//       "hash"    => string,
+		//       "queued"  => bool,
+		//       "success" => bool,
+		//       "uuid"    => int
+		// )
 
-	// retrieve URL status
-	$status = $blocked->get_status()->status_response();
-	print_r($status);
+		// retrieve URL status
+		$status = $blocked->get_status()->status_response();
+		print_r($status);
 
-	// yields:
-	// array(
-	//       "url-status" => string( "ok"|"blocked" ),
-	//       "categories" => array( string ),
-	//       "results"    => array(
-	//            blocktype               => 'what',
-	//            category                => 'ever',
-	//            first_blocked_timestamp => '2015-03-19 12:39:48',
-	//            last_blocked_timestamp  => '2015-03-19 12:39:48',
-	//            network_name            => 'Fake ISP Ltd',
-	//            status                  => 'ok',
-	//            status_timestamp        => '2015-04-30 22:46:54'
-	//               ...
-	//       )
-	// )
+		// yields:
+		// array(
+		//       "url-status" => string( "ok"|"blocked" ),
+		//       "categories" => array( string ),
+		//       "results"    => array(
+		//            blocktype               => 'what',
+		//            category                => 'ever',
+		//            first_blocked_timestamp => '2015-03-19 12:39:48',
+		//            last_blocked_timestamp  => '2015-03-19 12:39:48',
+		//            network_name            => 'Fake ISP Ltd',
+		//            status                  => 'ok',
+		//            status_timestamp        => '2015-04-30 22:46:54'
+		//               ...
+		//       )
+		// )
 
-	// possible results and their translation
-	$status_blocked = __('blocked', 'wp-blocked');
-	$status_ok = __('ok', 'wp-blocked');
-	$status_error = __('error', 'wp-blocked');
-	$status_dns_error = __('DNS error', 'wp-blocked');
-	$status_timeout = __('timeout', 'wp-blocked');
+		// possible results and their translation
+		$status_blocked = __('blocked', 'wp-blocked');
+		$status_ok = __('ok', 'wp-blocked');
+		$status_error = __('error', 'wp-blocked');
+		$status_dns_error = __('DNS error', 'wp-blocked');
+		$status_timeout = __('timeout', 'wp-blocked');
+	}
 }
 
 // create a shortcode which will insert a form [blocked_test_url]
