@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Blocked
-Plugin URI: http://github.com/iu451f/wp-blocked
+Plugin URI: http://github.com/u451f/wp-blocked
 Description:
 Version: 1.0
 Author: Ulrike Uhlig, Martin Gutsch
