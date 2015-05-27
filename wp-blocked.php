@@ -40,9 +40,13 @@ add_action('plugins_loaded', 'wp-blocked_init');
 
 function show_results($URL, $SSL=false) {
 
-	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS
-	require_once "secret-test.php"; 
-	$blocked = new BlockedUrl( $API_KEY, $API_EMAIL, $URL, $SSL, $URL_SUBMIT, $URL_STATUS ); // false = disable SSL peer verification
+	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via secret file
+	// require_once "secret-test.php"; 
+	// $blocked = new BlockedUrl( $API_KEY, $API_EMAIL, $URL, $SSL, $URL_SUBMIT, $URL_STATUS ); // false = disable SSL peer verification
+	
+	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via WP options
+	$options = get_option('wp_blocked_option_name');
+	$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $SSL, $options['URL_SUBMIT'], $options['URL_STATUS'] ); // false = disable SSL peer verification
 
 	// push your URL to network, and fetch response
 	$pushed = $blocked->push_request()->push_response();
