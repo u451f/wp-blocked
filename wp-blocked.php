@@ -87,7 +87,14 @@ function assert_equal( $given, $expected, $message ){
     }
 }
 
-// todo: create shortcode for query form and result
+// create a shortcode which will insert a form [blocked_test_url]
+// todo : treat the result
+function wp_blocked_url_shortcode() {
+       echo '<form method="POST"><input type="url" value="" name="wp_blocked_url" /><input type="submit" value="send" class="submit" /></form>';
+}
+add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
+
+// todo: tmp tester
 show_results('http://twitter.com');
 
 // Create configuration page where we can translate 5 results: ok, blocked, error, dns-error, timeout
