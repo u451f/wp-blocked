@@ -38,6 +38,15 @@ function wp_blocked_init() {
 }
 add_action('plugins_loaded', 'wp-blocked_init');
 
+function test_url() {
+	if(isset($_POST['wp_blocked_url'])) {
+		$URL = sanitize_url($_POST['wp_blocked_url']);
+	}
+	show_results($URL);
+}
+if(!is_admin()) 
+	add_action( 'init', 'test_url');
+
 function show_results($URL, $SSL=false) {
 
 	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via secret file
@@ -94,14 +103,11 @@ function show_results($URL, $SSL=false) {
 }
 
 // create a shortcode which will insert a form [blocked_test_url]
-// todo : treat the result
 function wp_blocked_url_shortcode() {
-       echo '<form method="POST"><input type="url" value="" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+	// todo : see what action="" should be
+    echo '<form method="POST" action=""><input type="url" value="" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
-
-// todo: tmp tester
-show_results('http://thepiratebay.se');
 
 // Create configuration page where we can translate 5 results: ok, blocked, error, dns-error, timeout
 class wpBlockedSettingsPage {
@@ -285,4 +291,4 @@ class wpBlockedSettingsPage {
 
 if( is_admin() )
     $wp_blocked_settings_page = new wpBlockedSettingsPage();
-	?>
+?>
