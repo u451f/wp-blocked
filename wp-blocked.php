@@ -31,6 +31,8 @@ Domain Path: /languages/
 require_once "lib/wp-l10n.php";
 require_once "lib/BlockedUrl.php";
 
+// todo: check requirements: is php-curl installed?
+
 /* l10n */
 function wp_blocked_init() {
 	 $plugin_dir = basename(dirname(__FILE__));
