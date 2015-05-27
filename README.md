@@ -1,6 +1,6 @@
-# WP-Blocked 
+# WP-Blocked
 
-A wordpress plugin to check for blocked URLs. Depends on php-lib-blocked-url (included).
+A wordpress plugin to check for blocked URLs. Depends on php-lib-blocked-url (included) and php5-curl.
 
 # BlockedUrl
 
@@ -40,13 +40,13 @@ Project API
     // )
 
     // retrieve URL status
-    $status = $blocked->get_status()->status_response();     
+    $status = $blocked->get_status()->status_response();
 
     // yields:
     // array(
     //       "url-status" => string( "ok"|"blocked" ),
     //       "categories" => array( string ),
-    //       "results"    => array( 
+    //       "results"    => array(
     //            blocktype               => 'what',
     //            category                => 'ever',
     //            first_blocked_timestamp => '2015-03-19 12:39:48',
