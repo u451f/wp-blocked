@@ -28,6 +28,9 @@ Domain Path: /languages/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+require_once "lib/wp-l10n.php";
+require_once "lib/BlockedUrl.php";
+
 /* l10n */
 function wp_blocked_init() {
 	 $plugin_dir = basename(dirname(__FILE__));
@@ -35,7 +38,6 @@ function wp_blocked_init() {
 }
 add_action('plugins_loaded', 'wp-blocked_init');
 
-require_once "lib/BlockedUrl.php";
 function show_results($URL, $SSL=false) {
 
 	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS
