@@ -36,13 +36,13 @@ function wp_blocked_init() {
 	 $plugin_dir = basename(dirname(__FILE__));
 	 load_plugin_textdomain( 'wp-blocked', false, "$plugin_dir/languages" );
 }
-add_action('plugins_loaded', 'wp-blocked_init');
+add_action('plugins_loaded', 'wp_blocked_init');
 
 function test_url() {
 	if(isset($_POST['wp_blocked_url'])) {
 		$URL = sanitize_url($_POST['wp_blocked_url']);
+		show_results($URL);
 	}
-	show_results($URL);
 }
 if(!is_admin()) 
 	add_action( 'init', 'test_url');
@@ -105,7 +105,7 @@ function show_results($URL, $SSL=false) {
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
 	// todo : see what action="" should be
-    echo '<form method="POST"><input type="url" value="" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+    echo '<form method="POST"><input  placeholder="'. __('Enter URL to test if it is blocked').'" type="url" value="" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
