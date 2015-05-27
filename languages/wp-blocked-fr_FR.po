@@ -3,39 +3,40 @@ msgstr ""
 "Project-Id-Version: wp-blocked\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-05-26 00:29:45+0000\n"
-"Last-Translator: u <u@451f.org>\n"
+"PO-Revision-Date: 2015-05-27 16:56+0100\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Generator: CSL v1.x\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.6.10\n"
+"Language: fr\n"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "blocked"
-msgstr ""
+msgstr "censuré"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "ok"
-msgstr ""
+msgstr "ok"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "DNS error"
-msgstr ""
+msgstr "Erreur DNS"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "error"
-msgstr ""
+msgstr "Erreur"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "timeout"
-msgstr ""
+msgstr "Délai dépassé"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Missing options."
-msgstr ""
+msgstr "Options manquantes."
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Test if this URL is blocked"
-msgstr ""
+msgstr "Vérifier si cette URL est censurée"
