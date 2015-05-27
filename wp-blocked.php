@@ -249,35 +249,35 @@ class wpBlockedSettingsPage {
 
     public function api_email_callback() {
         printf(
-            '<input type="text" id="API_EMAIL" name="wp_blocked_option_name[API_EMAIL]" value="%s" class="regular-text ltr" />',
+            '<input type="text" id="API_EMAIL" name="wp_blocked_option_name[API_EMAIL]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['API_EMAIL'])
         );
     }
     
 	public function api_key_callback() {
         printf(
-            '<input type="text" id="API_KEY" name="wp_blocked_option_name[API_KEY]" value="%s" class="regular-text ltr" />',
+            '<input type="text" id="API_KEY" name="wp_blocked_option_name[API_KEY]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['API_KEY'])
         );
     }
 
     public function url_submit_callback() {
         printf(
-            '<input type="url" id="URL_SUBMIT" name="wp_blocked_option_name[URL_SUBMIT]" value="%s" class="regular-text ltr" />',
+            '<input type="url" id="URL_SUBMIT" name="wp_blocked_option_name[URL_SUBMIT]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['URL_SUBMIT'])
         );
     }
 
     public function url_status_callback() {
         printf(
-            '<input type="url" id="URL_STATUS" name="wp_blocked_option_name[URL_STATUS]" value="%s" class="regular-text ltr" />',
+            '<input type="url" id="URL_STATUS" name="wp_blocked_option_name[URL_STATUS]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['URL_STATUS'])
         );
     }
 
     public function languages_status_callback() {
         printf(
-            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" />',
+            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['languages'])
         );
     }
@@ -285,4 +285,4 @@ class wpBlockedSettingsPage {
 
 if( is_admin() )
     $wp_blocked_settings_page = new wpBlockedSettingsPage();
-?>
+	?>
