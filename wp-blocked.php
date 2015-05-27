@@ -214,7 +214,7 @@ class wpBlockedSettingsPage {
             $input['URL_SUBMIT'] = esc_url( $input['URL_SUBMIT'] );
         if( !empty( $input['URL_STATUS'] ) )
             $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
-        if( !empty( $input['languages'] ) )
+        if( !empty( $input['languages'] ) ) {
             $input['languages'] = sanitize_text_field(str_replace( ';', ',', $input['languages'] ));
             $tmplanguages = explode( ',', $input['languages'] );
             foreach($tmplanguages as $language) {
@@ -224,7 +224,7 @@ class wpBlockedSettingsPage {
                 }
             }
             $input['languages'] = implode(',', $clean_languages);
-		}
+	}
         return $input;
     }
 
