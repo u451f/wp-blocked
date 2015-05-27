@@ -36,13 +36,13 @@ function wp_blocked_init() {
 	 $plugin_dir = basename(dirname(__FILE__));
 	 load_plugin_textdomain( 'wp-blocked', false, "$plugin_dir/languages" );
 }
-add_action('plugins_loaded', 'wp-blocked_init');
+add_action('plugins_loaded', 'wp_blocked_init');
 
 function test_url() {
 	if(isset($_POST['wp_blocked_url'])) {
 		$URL = sanitize_url($_POST['wp_blocked_url']);
+		show_results($URL);
 	}
-	show_results($URL);
 }
 if(!is_admin()) 
 	add_action( 'init', 'test_url');
