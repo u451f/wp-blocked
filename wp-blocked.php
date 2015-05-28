@@ -46,12 +46,14 @@ function test_url() {
 		} else {
 			$URL = sanitize_url($_POST['wp_blocked_url']);
 		}
-		return $post->post_content.'<hr />'.show_results($URL);
+		$output = $post->post_content.'<hr />'.show_results($URL);
 	} else {
-		return $post->post_content;
+		$output = $post->post_content;
 	}
+	//$output = apply_filters('the_content', $output);
+	return $output;
 }
-add_filter( 'the_content', 'test_url',10,0);
+add_filter( 'the_content', 'test_url', 4, 0);
 
 function show_results($URL, $SSL=false) {
 
@@ -147,7 +149,7 @@ function wp_blocked_url_shortcode() {
     	
 	$form = '<form method="POST" action="'.get_permalink($options['resultspage']).'" validate>';
 	$form .= '<input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
-	echo $form;
+	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
