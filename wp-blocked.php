@@ -38,9 +38,13 @@ function wp_blocked_init() {
 add_action('plugins_loaded', 'wp_blocked_init');
 
 function test_url() {
-	if(isset($_POST['wp_blocked_url'])) {
-		$URL = sanitize_url($_POST['wp_blocked_url']);
-		show_results($URL);
+	if(isset($_POST['wp_blocked_url']) OR isset($_GET['blocked_url'])) { // fixme: add also if is page() and use results page from options here
+		if(isset($_POST['wp_blocked_url'])) {
+			$URL = sanitize_url($_POST['wp_blocked_url']);
+		} else {
+			$URL = sanitize_url($_GET['blocked_url']);
+		}
+		echo show_results($URL);
 	}
 }
 if(!is_admin()) 
@@ -60,9 +64,10 @@ function show_results($URL, $SSL=false) {
 		echo __("Missing options.", 'wp-blocked');
 	} else {
 		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $SSL, $options['URL_SUBMIT'], $options['URL_STATUS'] ); // false = disable SSL peer verification
+
 		// push your URL to network, and fetch response
 		$pushed = $blocked->push_request()->push_response();
-		print_r($pushed);
+		// print_r($pushed);
 
 		// yields:
 		// array(
@@ -74,7 +79,7 @@ function show_results($URL, $SSL=false) {
 
 		// retrieve URL status
 		$status = $blocked->get_status()->status_response();
-		print_r($status);
+		// print_r($status);
 
 		// yields:
 		// array(
@@ -91,14 +96,36 @@ function show_results($URL, $SSL=false) {
 		//               ...
 		//       )
 		// )
+		if($status['success'] == 1) {
+			$output .= '<h2 class="url-searched">'.__("Results for").' '. $status['url'].'</h2>';
+			$output .= '<h3 class="url-status">'.__("Status:").' '. $status['url-status'].'</h3>';
+			if(count($status['results']) > 0) {
+				$output .= '<table class="url-results">';
+				$output .= '<tr><th>'.__('ISP').'</th><th>'.__('Result').'</th><th>'.__('Last check on').'</th><th>'.__('Last block on').'</th>';
+				foreach ($status['results'] as $result) {
+					// load translations
+					if($result['status'] == 'blocked') {$readable_status = __('blocked', 'wp-blocked');}
+					else if($result['status'] == 'ok') {$readable_status = __('ok', 'wp-blocked');}
+					else if($result['status'] == 'error') {$readable_status = __('error', 'wp-blocked');}
+					else if($result['status'] == 'dns-error') {$readable_status = __('DNS error', 'wp-blocked');}
+					else if($result['status'] == 'timeout') {$readable_status = __('timeout', 'wp-blocked');}
 
-		// possible results and their translation
-		$status_blocked = __('blocked', 'wp-blocked');
-		$status_ok = __('ok', 'wp-blocked');
-		$status_error = __('error', 'wp-blocked');
-		$status_dns_error = __('DNS error', 'wp-blocked');
-		$status_timeout = __('timeout', 'wp-blocked');
+					$output .= '<tr class="'.$result['status'].'">';
+					$output .= '<td>'.$result['network_name'].'</td>';
+					$output .= '<td>'.$readable_status.'</td>';
+					$output .= '<td>'.$result['last_blocked_timestamp'].'</td>';
+					$output .= '<td>'.$result['first_blocked_timestamp'].'</td>';
+					//$result['category']
+					//$result['blocktype']
+					$output .= '</tr>';
+				}
+				$output .= '</table>';
+			}
+		} else {
+			$output .= '<p class="error">Could not retrieve results.</p>';
+		}
 	}
+	return $output;
 }
 
 // create a shortcode which will insert a form [blocked_test_url]
