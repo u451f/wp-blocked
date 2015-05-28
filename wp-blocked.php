@@ -28,7 +28,6 @@ Domain Path: /languages/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require_once "lib/wp-l10n.php";
 require_once "lib/BlockedUrl.php";
 
 /* l10n */
@@ -206,6 +205,13 @@ class wpBlockedSettingsPage {
             'wp_blocked_section_general'
         );
         add_settings_field(
+            'resultspage',
+            'Page ID for results',
+            array( $this, 'resultspage_status_callback' ),
+            'wp-blocked-settings',
+            'wp_blocked_section_general'
+        );
+        add_settings_field(
             'languages',
             'Languages (separated by comma, use international abbreviations (ie. "fr" for french, "ar" for arabic.)',
             array( $this, 'languages_status_callback' ),
@@ -229,6 +235,8 @@ class wpBlockedSettingsPage {
             $input['URL_SUBMIT'] = esc_url( $input['URL_SUBMIT'] );
         if( !empty( $input['URL_STATUS'] ) )
             $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
+        if( !empty( $input['resultspage'] ) )
+            $input['resultspage'] = esc_url( $input['resultspage'] );
         if( !empty( $input['languages'] ) ) {
             $input['languages'] = sanitize_text_field(str_replace( ';', ',', $input['languages'] ));
             $tmplanguages = explode( ',', $input['languages'] );
@@ -261,7 +269,7 @@ class wpBlockedSettingsPage {
         );
     }
     
-	public function api_key_callback() {
+    public function api_key_callback() {
         printf(
             '<input type="text" id="API_KEY" name="wp_blocked_option_name[API_KEY]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['API_KEY'])
@@ -282,9 +290,16 @@ class wpBlockedSettingsPage {
         );
     }
 
+    public function resultspage_status_callback() {
+        printf(
+            '<input type="text" id="resultspage" name="wp_blocked_option_name[resultspage]" value="%s" class="regular-text ltr" required />',
+            esc_attr( $this->options['resultspage'])
+        );
+    }
+
     public function languages_status_callback() {
         printf(
-            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" required />',
+            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" />',
             esc_attr( $this->options['languages'])
         );
     }
