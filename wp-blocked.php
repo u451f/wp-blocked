@@ -38,11 +38,11 @@ function wp_blocked_init() {
 add_action('plugins_loaded', 'wp_blocked_init');
 
 function test_url() {
-	if(isset($_POST['wp_blocked_url']) OR isset($_GET['blocked_url'])) { // fixme: add also if is page() and use results page from options here
+	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url'])) { // fixme: add also if is page() and use results page from options here
 		if(isset($_POST['wp_blocked_url'])) {
 			$URL = sanitize_url($_POST['wp_blocked_url']);
 		} else {
-			$URL = sanitize_url($_GET['blocked_url']);
+			$URL = sanitize_url($_GET['wp_blocked_url']);
 		}
 		echo show_results($URL);
 	}
@@ -141,7 +141,7 @@ function show_results($URL, $SSL=false) {
 function wp_blocked_url_shortcode() {
 	// todo : see what action="" should be
 	if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
-    echo '<form method="POST"><input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+    echo '<form method="POST validate"><input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
