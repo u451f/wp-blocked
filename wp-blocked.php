@@ -101,7 +101,7 @@ function show_results($URL, $SSL=false) {
 			$output .= '<h3 class="url-status">'.__("Status:").' '. $status['url-status'].'</h3>';
 			if(count($status['results']) > 0) {
 				$output .= '<table class="url-results">';
-				$output .= '<tr><th>'.__('ISP').'</th><th>'.__('Result').'</th><th>'.__('Last check on').'</th><th>'.__('Last block on').'</th>';
+				$output .= '<thead><tr><th>'.__('ISP').'</th><th>'.__('Result').'</th><th>'.__('Last check on').'</th><th>'.__('Last block on').'</th></thead>';
 				foreach ($status['results'] as $result) {
 					// load translations
 					if($result['status'] == 'blocked') {$readable_status = __('blocked', 'wp-blocked');}
@@ -110,11 +110,20 @@ function show_results($URL, $SSL=false) {
 					else if($result['status'] == 'dns-error') {$readable_status = __('DNS error', 'wp-blocked');}
 					else if($result['status'] == 'timeout') {$readable_status = __('timeout', 'wp-blocked');}
 
-					$output .= '<tr class="'.$result['status'].'">';
+					// create css classes for rows
+					$css_class = strtolower($result['status']);
+					if($result['first_blocked_timestamp']) $css_class .= " prior-block";
+
+					// if there is no first_blocked_ts this has never been blocked & we need to assign the current ts to last_blocked_ts
+					$first_blocked_timestamp = $result['first_blocked_timestamp'] ?:  __('No record of prior block');
+					$last_blocked_timestamp = $result['last_blocked_timestamp'] ?: $result['status_timestamp'];
+					
+					// html output
+					$output .= '<tr class="'.$css_class.'">';
 					$output .= '<td>'.$result['network_name'].'</td>';
 					$output .= '<td>'.$readable_status.'</td>';
-					$output .= '<td>'.$result['last_blocked_timestamp'].'</td>';
-					$output .= '<td>'.$result['first_blocked_timestamp'].'</td>';
+					$output .= '<td>'.$last_blocked_timestamp.'</td>';
+					$output .= '<td>'.$first_blocked_timestamp.'</td>';
 					//$result['category']
 					//$result['blocktype']
 					$output .= '</tr>';
