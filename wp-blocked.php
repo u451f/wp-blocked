@@ -89,7 +89,7 @@ function format_results($URL, $SSL=false) {
 	$status = fetch_results($URL, $SSL);
 	if($status['success'] == 1) {
 		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>';
-		$output .= '<h3 class="url-status">'.__("Status:", 'wp-blocked').' '. $status['url-status'].'</h3>';
+		$output .= '<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>';
 		if(count($status['results']) > 0) {
 			$output .= '<table class="url-results">';
 			$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>';
@@ -153,7 +153,7 @@ function wp_blocked_url_shortcode() {
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
     	
 	$form = '<form method="POST" action="'.get_permalink($options['resultspage']).'" validate>';
-	$form .= '<input  placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+	$form .= '<input  placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );

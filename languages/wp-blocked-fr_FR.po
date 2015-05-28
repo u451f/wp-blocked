@@ -68,3 +68,7 @@ msgstr "Résultats pour"
 # @ wp-blocked
 msgid "Status"
 msgstr "Etat"
+
+# @ wp-blocked
+msgid "send"
+msgstr "envoyer"
