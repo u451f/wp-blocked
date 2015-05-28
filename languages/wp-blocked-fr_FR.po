@@ -15,7 +15,7 @@ msgstr ""
 
 # @ wp-blocked
 msgid "blocked"
-msgstr "censuré"
+msgstr "bloqué"
 
 # @ wp-blocked
 msgid "ok"
@@ -39,32 +39,32 @@ msgstr "Options manquantes."
 
 # @ wp-blocked
 msgid "Test if this URL is blocked"
-msgstr "Vérifier si cette URL est censurée"
+msgstr "Vérifier si cette URL est bloquée ou censurée"
 
 #@ wp-blocked
 msgid "ISP"
-msgstr ""
+msgstr "FAI"
 
 #@ wp-blocked
 msgid "Result"
-msgstr ""
+msgstr "Résultat"
 
 #@ wp-blocked
 msgid "Last check on"
-msgstr ""
+msgstr "Dernière vérification"
 
 #@ wp-blocked
 msgid "Last block on"
-msgstr ""
+msgstr "Dernier cas de blocage"
 
 #@ wp-blocked
 msgid "No record of prior block."
-msgstr ""
+msgstr "Pas d'enregistrement d'un blocage précédent."
 
 #@ wp-blocked
 msgid "Results for"
-msgstr ""
+msgstr "Résultats pour"
 
 #@ wp-blocked
 msgid "Status"
-msgstr ""
+msgstr "Etat"
