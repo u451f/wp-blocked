@@ -136,11 +136,12 @@ function display_results() {
 		} else {
 			$URL = sanitize_url($_POST['wp_blocked_url']);
 		}
-		$output = $post->post_content.'<hr />'.format_results($URL);
+		// fixme: check if URL is SSL and if yes, then set $SSL to true
+		$SSL = false;
+		$output = $post->post_content.'<hr />'.format_results($URL, $SSL);
 	} else {
 		$output = $post->post_content;
 	}
-	//$output = apply_filters('the_content', $output);
 	return $output;
 }
 add_filter( 'the_content', 'display_results', 4, 0);
