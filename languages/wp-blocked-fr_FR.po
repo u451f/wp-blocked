@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wp-blocked\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-05-27 16:56+0100\n"
+"PO-Revision-Date: 2015-05-28 20:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,30 +41,30 @@ msgstr "Options manquantes."
 msgid "Test if this URL is blocked"
 msgstr "Vérifier si cette URL est bloquée ou censurée"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "ISP"
 msgstr "FAI"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Result"
 msgstr "Résultat"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Last check on"
 msgstr "Dernière vérification"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Last block on"
 msgstr "Dernier cas de blocage"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "No record of prior block."
 msgstr "Pas d'enregistrement d'un blocage précédent."
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Results for"
 msgstr "Résultats pour"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Status"
 msgstr "Etat"
