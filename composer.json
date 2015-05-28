@@ -1,15 +1,20 @@
 {
     "name": "u451f/wp-blocked",
-    "description": "Wordpress Plugin for Censorship Monitoring Project",
+    "description": "Wordpress Plugin for Censorship Monitoring Project / Blocked Middleware",
     "keywords": [],
     "homepage": "https://github.com/u451f/wp-blocked",
     "type": "library",
-    "license": "MIT",
+    "license": "GPL2+",
     "authors": [
         {
             "name": "Martin Gutsch",
             "email": "mg@gutsch.it",
             "homepage": "http://gutsch.it/"
+        },
+        {
+            "name": "Ulrike Uhlig",
+            "email": "u@451f.org",
+            "homepage": "http://curlybracket.net/"
         }
     ],
     "require": {
