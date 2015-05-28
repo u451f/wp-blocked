@@ -88,11 +88,11 @@ function fetch_results($URL, $SSL) {
 function format_results($URL, $SSL=false) {
 	$status = fetch_results($URL, $SSL);
 	if($status['success'] == 1) {
-		$output .= '<h2 class="url-searched">'.__("Results for").' '. $status['url'].'</h2>';
-		$output .= '<h3 class="url-status">'.__("Status:").' '. $status['url-status'].'</h3>';
+		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>';
+		$output .= '<h3 class="url-status">'.__("Status:", 'wp-blocked').' '. $status['url-status'].'</h3>';
 		if(count($status['results']) > 0) {
 			$output .= '<table class="url-results">';
-			$output .= '<thead><tr><th>'.__('ISP').'</th><th>'.__('Result').'</th><th>'.__('Last check on').'</th><th>'.__('Last block on').'</th></thead>';
+			$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>';
 			foreach ($status['results'] as $result) {
 				// load translations
 				if($result['status'] == 'blocked') {$readable_status = __('blocked', 'wp-blocked');}
@@ -106,7 +106,7 @@ function format_results($URL, $SSL=false) {
 				if($result['first_blocked_timestamp']) $css_class .= " prior-block";
 
 				// if there is no first_blocked_ts this has never been blocked & we need to assign the current ts to last_blocked_ts
-				$first_blocked_timestamp = $result['first_blocked_timestamp'] ?:  __('No record of prior block');
+				$first_blocked_timestamp = $result['first_blocked_timestamp'] ?:  __('No record of prior block', 'wp-blocked');
 				$last_blocked_timestamp = $result['last_blocked_timestamp'] ?: $result['status_timestamp'];
 				
 				// html output
@@ -153,7 +153,7 @@ function wp_blocked_url_shortcode() {
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
     	
 	$form = '<form method="POST" action="'.get_permalink($options['resultspage']).'" validate>';
-	$form .= '<input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+	$form .= '<input  placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
