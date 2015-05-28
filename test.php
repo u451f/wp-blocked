@@ -1,8 +1,9 @@
 <?php
-
 /*
 SYNOPIS
 
+This uses only files in lib/* and secret-test.php and can be used to run a test from the commandline:
+`php test.php`
 */
 
 $API_KEY;
@@ -11,9 +12,10 @@ $URL_SUBMIT;
 $URL_STATUS;
 require "secret-test.php"; // load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS or set above
 
+// load lib
 require "lib/BlockedUrl.php";
 
-// oh yeah, gloabls.
+// oh yeah, globals.
 $b = new BlockedUrl( $API_KEY, $API_EMAIL, 'http://twitter.com', false, $URL_SUBMIT, $URL_STATUS );
 
 // simply check for given equals excepted and print some fail/success messages
