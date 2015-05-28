@@ -2,11 +2,11 @@
 /*
 Plugin Name: WP Blocked
 Plugin URI: http://github.com/u451f/wp-blocked
-Description:
+Description: Wordpress plugin to interact with the Blocked-Middleware by OpenRightsGroup. API credentials can be configured via a settings page.
 Version: 1.0
 Author: Ulrike Uhlig, Martin Gutsch
 Author URI: http://curlybracket.net
-License: GPL2+
+License: GPL3+
 Text Domain: wp-blocked 
 Domain Path: /languages/
 */
@@ -36,7 +36,7 @@ function wp_blocked_init() {
 add_action('plugins_loaded', 'wp_blocked_init');
 
 // fetch results from server
-function fetch_results($URL, $SSL) {
+function fetch_results($URL, $SSL=false) {
 	require_once "lib/BlockedUrl.php";
 
 	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via WP options
@@ -80,13 +80,13 @@ function fetch_results($URL, $SSL) {
 		//       )
 		// )
 
-		return $status;
+		// return $status;
+		return format_results($status);		
 	}
 }
 
 // create HTML output for status results
-function format_results($URL, $SSL=false) {
-	$status = fetch_results($URL, $SSL);
+function format_results($status) {
 	if($status['success'] == 1) {
 		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>';
 		$output .= '<h3 class="url-status">'.__("Status:", 'wp-blocked').' '. $status['url-status'].'</h3>';
@@ -122,7 +122,7 @@ function format_results($URL, $SSL=false) {
 			$output .= '</table>';
 		}
 	} else {
-		$output .= '<p class="error">Could not retrieve results.</p>';
+		$output .= '<p class="error">'.__("Could not retrieve results.", 'wp-blocked').'</p>';
 	}
 	return $output;
 }
@@ -138,7 +138,7 @@ function display_results() {
 		}
 		// fixme: check if URL is SSL and if yes, then set $SSL to true
 		$SSL = false;
-		$output = $post->post_content.'<hr />'.format_results($URL, $SSL);
+		$output = $post->post_content.'<hr />'.fetch_results($URL, $SSL);
 	} else {
 		$output = $post->post_content;
 	}
@@ -158,7 +158,7 @@ function wp_blocked_url_shortcode() {
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
-// Create configuration page where we can translate 5 results: ok, blocked, error, dns-error, timeout
+// Create configuration page for wp-admin. Each domain shall configure their API_KEY, API_EMAIL, URL_SUBMIT, URL_STATUS and results page.
 class wpBlockedSettingsPage {
     /**
      * Holds the values to be used in the fields callbacks
