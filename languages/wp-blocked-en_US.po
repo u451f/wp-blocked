@@ -39,3 +39,31 @@ msgstr ""
 #@ wp-blocked
 msgid "Test if this URL is blocked"
 msgstr ""
+
+#@ wp-blocked
+msgid "ISP"
+msgstr ""
+
+#@ wp-blocked
+msgid "Result"
+msgstr ""
+
+#@ wp-blocked
+msgid "Last check on"
+msgstr ""
+
+#@ wp-blocked
+msgid "Last block on"
+msgstr ""
+
+#@ wp-blocked
+msgid "No record of prior block."
+msgstr ""
+
+#@ wp-blocked
+msgid "Results for"
+msgstr ""
+
+#@ wp-blocked
+msgid "Status"
+msgstr ""
