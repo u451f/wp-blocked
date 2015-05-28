@@ -38,17 +38,20 @@ function wp_blocked_init() {
 add_action('plugins_loaded', 'wp_blocked_init');
 
 function test_url() {
-	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url'])) { // fixme: add also if is page() and use results page from options here
-		if(isset($_POST['wp_blocked_url'])) {
-			$URL = sanitize_url($_POST['wp_blocked_url']);
-		} else {
+	global $post;
+	$options = get_option('wp_blocked_option_name');
+	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($option['resultspage'])) {
+		if(isset($_GET['wp_blocked_url'])) {
 			$URL = sanitize_url($_GET['wp_blocked_url']);
+		} else {
+			$URL = sanitize_url($_POST['wp_blocked_url']);
 		}
-		echo show_results($URL);
+		return $post->post_content.'<hr />'.show_results($URL);
+	} else {
+		return $post->post_content;
 	}
 }
-if(!is_admin()) 
-	add_action( 'init', 'test_url');
+add_filter( 'the_content', 'test_url',10,0);
 
 function show_results($URL, $SSL=false) {
 
@@ -139,9 +142,12 @@ function show_results($URL, $SSL=false) {
 
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
-	// todo : see what action="" should be
-	if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
-    echo '<form method="POST validate"><input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+	$options = get_option('wp_blocked_option_name');
+	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
+    	
+	$form = '<form method="POST" action="'.get_permalink($options['resultspage']).'" validate>';
+	$form .= '<input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
+	echo $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
@@ -272,7 +278,7 @@ class wpBlockedSettingsPage {
         if( !empty( $input['URL_STATUS'] ) )
             $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
         if( !empty( $input['resultspage'] ) )
-            $input['resultspage'] = esc_url( $input['resultspage'] );
+            $input['resultspage'] = sanitize_text_field( $input['resultspage'] );
         if( !empty( $input['languages'] ) ) {
             $input['languages'] = sanitize_text_field(str_replace( ';', ',', $input['languages'] ));
             $tmplanguages = explode( ',', $input['languages'] );
@@ -328,7 +334,7 @@ class wpBlockedSettingsPage {
 
     public function resultspage_status_callback() {
         printf(
-            '<input type="text" id="resultspage" name="wp_blocked_option_name[resultspage]" value="%s" class="regular-text ltr" required />',
+            '<input type="number" id="resultspage" name="wp_blocked_option_name[resultspage]" value="%s" class="regular-text ltr" required />',
             esc_attr( $this->options['resultspage'])
         );
     }
