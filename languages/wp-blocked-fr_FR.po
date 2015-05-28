@@ -68,3 +68,7 @@ msgstr "Résultats pour"
 # @ wp-blocked
 msgid "Status"
 msgstr "Etat"
+
+# @ wp-blocked
+msgid "Could not retrieve results."
+msgstr "Echec de récupération des résultats."

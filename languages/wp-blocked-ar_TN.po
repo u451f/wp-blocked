@@ -67,3 +67,7 @@ msgstr ""
 #@ wp-blocked
 msgid "Status"
 msgstr ""
+
+# @ wp-blocked
+msgid "Could not retrieve results."
+msgstr ""
