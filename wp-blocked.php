@@ -150,6 +150,7 @@ add_filter( 'the_content', 'display_results', 4, 0);
 function wp_blocked_url_shortcode() {
 	$options = get_option('wp_blocked_option_name');
 	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
+	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
     	
 	$form = '<form method="POST" action="'.get_permalink($options['resultspage']).'" validate>';
 	$form .= '<input  placeholder="'. __('Test if this URL is blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="send" class="submit" /></form>';
