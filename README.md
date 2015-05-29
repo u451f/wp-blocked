@@ -5,8 +5,10 @@ Depends on php-lib-blocked-url (included) and php5-curl.
 
 # BlockedUrl
 
-A simple library that lets you submit URLs to it and fetch a result later. Implemented in Perl and PHP.
+A simple library that lets you submit URLs to it and fetch a result later. Implemented in Perl, PHP and as a Wordpress plugin.
 
+- Pure PHP implementation can be found [here](https://github.com/u451f/wp-blocked/tree/pure-php)
+- Wordpress plugin can be found [here](https://github.com/u451f/wp-blocked/tree/master)
 - Perl implementation van be found [here](https://github.com/u451f/blocked-perl)
 
 - - -
@@ -68,16 +70,6 @@ Project API / Blocked Middleware.
 
 In order to test from the commandline, you'll need to create secret-test.php and configure the variables
 $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS in there. Then simply run `php test.php`
-
-### Wordpress plugin
-
- * Make sure you have php5-curl installed on your webserver.
- * To install the Wordpress plugin for the repository and copy the wp-blocked folder to wp-content/plugins.
- * Activate the plugin through the Wordpress admin interface.
- * Configure the plugin through the wp-admin interface -> Settings -> WP Blocked Settings. This is where you will enter your API credentials.
- * You can add the `[blocked_test_url]` shortcode whereever you want to provide a search form for blocked URLs.
- * In the settings, you'll need to provide a page ID to which the search form redirects in order to display the results. On this page, please add the `[blocked_test_url]` shortcode.
- * The main plugin file is wp-blocked.php. It uses everything in lib/ and language/.
 
 ## METHODS
 
