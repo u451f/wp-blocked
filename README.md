@@ -71,10 +71,12 @@ $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS in there. Then simply run `php te
 
 ### Wordpress plugin
 
+ * Make sure you have php5-curl installed on your webserver.
  * To install the Wordpress plugin for the repository and copy the wp-blocked folder to wp-content/plugins.
  * Activate the plugin through the Wordpress admin interface.
- * Make sure you have php5-curl installed on your webserver.
- * Configure the plugin through the wp-admin interface -> Settings -> WP Blocked Settings.
+ * Configure the plugin through the wp-admin interface -> Settings -> WP Blocked Settings. This is where you will enter your API credentials.
+ * You can add the `[blocked_test_url]` shortcode whereever you want to provide a search form for blocked URLs.
+ * In the settings, you'll need to provide a page ID to which the search form redirects in order to display the results. On this page, please add the `[blocked_test_url]` shortcode.
  * The main plugin file is wp-blocked.php. It uses everything in lib/ and language/.
 
 ## METHODS
