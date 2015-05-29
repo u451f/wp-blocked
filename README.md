@@ -1,6 +1,7 @@
 # WP-Blocked
 
-A wordpress plugin to check for blocked URLs. Depends on php-lib-blocked-url (included) and php5-curl.
+A wordpress plugin to check for blocked URLs querying the Blocked Middleware by OpenRightGroup. 
+Depends on php-lib-blocked-url (included) and php5-curl.
 
 # BlockedUrl
 
@@ -93,4 +94,3 @@ Returns $this, throws exception on all other errors.
 ### status_response()
 
 Returns the parsed JSON answer of last successful get_status()
-
