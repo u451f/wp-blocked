@@ -8,8 +8,8 @@ class BlockedUrl {
     public  $api_key;
     public  $api_email;
     public  $url;
-    public $url_submit;
-    public $url_status;
+    public  $url_submit;
+    public  $url_status;
 
     private $_push_response;
     private $_status_response;
@@ -53,7 +53,12 @@ class BlockedUrl {
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => false
             );
-        }
+        } else {
+            return array(
+                CURLOPT_SSL_VERIFYHOST => 1,
+                CURLOPT_SSL_VERIFYPEER => true
+           );
+	}
         return array();
     }
     

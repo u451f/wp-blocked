@@ -136,8 +136,9 @@ function display_results() {
 		} else {
 			$URL = sanitize_url($_POST['wp_blocked_url']);
 		}
-		// fixme: check if URL is SSL and if yes, then set $SSL to true
-		$SSL = false;
+		// check if URL is SSL and if yes, then set $SSL to true
+		if(substr($URL, 0, 4) == "https") $SSL = true; 
+		else $SSL = false;
 		$output = $post->post_content.'<hr />'.fetch_results($URL, $SSL);
 	} else {
 		$output = $post->post_content;
