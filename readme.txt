@@ -19,8 +19,11 @@ wp-blocked simply provides a query frontend for Wordpress, but requires to insta
 == Installation ==
 
 1. Unzip and upload `/wp-blocked/` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Configure the API credentials and URLs in the settings menu
+2. Make sure you have php5-curl installed on your webserver.
+3. Activate the plugin through the 'Plugins' menu in WordPress
+4. Configure the plugin through the wp-admin interface -> Settings -> WP Blocked Settings. This is where you will enter your API credentials.
+5. Now you can add the [blocked_test_url] shortcode whereever you want to provide a search form for blocked URLs.
+6. In the settings, you'll need to provide a page ID to which the search form redirects in order to display the results. On this page, please add the [blocked_test_url] shortcode.
 
 == Changelog ==
 
