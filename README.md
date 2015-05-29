@@ -6,6 +6,8 @@ A wordpress plugin to check for blocked URLs. Depends on php-lib-blocked-url (in
 
 A simple library that lets you submit URLs to it and fetch a result later. Implemented in Perl and PHP.
 
+- Perl implementation van be found [here](https://github.com/u451f/blocked-perl)
+
 - - -
 # Documentation
 
