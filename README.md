@@ -23,9 +23,12 @@ BlockedUrl
 ## DESCRIPTION
 
 Minimal URL submit/status implementation of Censorship Monitoring
-Project API
+Project API / Blocked Middleware.
 
 ## SYNOPSIS
+	
+### Simple PHP implementation
+
     require "lib/BlockedUrl.php";
 
     $blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>' );
@@ -60,6 +63,19 @@ Project API
     //               ...
     //       )
     // )
+
+### Test
+
+In order to test from the commandline, you'll need to create secret-test.php and configure the variables
+$API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS in there. Then simply run `php test.php`
+
+### Wordpress plugin
+
+ * To install the Wordpress plugin for the repository and copy the wp-blocked folder to wp-content/plugins.
+ * Activate the plugin through the Wordpress admin interface.
+ * Make sure you have php5-curl installed on your webserver.
+ * Configure the plugin through the wp-admin interface -> Settings -> WP Blocked Settings.
+ * The main plugin file is wp-blocked.php. It uses everything in lib/ and language/.
 
 ## METHODS
 
