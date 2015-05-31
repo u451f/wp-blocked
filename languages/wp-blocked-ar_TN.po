@@ -14,59 +14,59 @@ msgstr ""
 
 #@ wp-blocked
 msgid "blocked"
-msgstr ""
+msgstr "محجوب"
 
 #@ wp-blocked
 msgid "ok"
-msgstr ""
+msgstr "نعم"
 
 #@ wp-blocked
 msgid "DNS error"
-msgstr ""
+msgstr "DNS خطأ نظام أسماء النطاقات"
 
 #@ wp-blocked
 msgid "error"
-msgstr ""
+msgstr "خطأ"
 
 #@ wp-blocked
 msgid "timeout"
-msgstr ""
+msgstr "نفذ وقت الاتصال بالشبكة"
 
 #@ wp-blocked
 msgid "Missing options."
-msgstr ""
+msgstr "خيارات مفقودة"
 
 #@ wp-blocked
 msgid "Test if this URL is blocked"
-msgstr ""
+msgstr "اختبر إذا كان هذا الرابط محجوب"
 
 #@ wp-blocked
 msgid "ISP"
-msgstr ""
+msgstr "مزود خدمات انترنيت"
 
 #@ wp-blocked
 msgid "Result"
-msgstr ""
+msgstr "نتيجة"
 
 #@ wp-blocked
 msgid "Last check on"
-msgstr ""
+msgstr "آخر فحص بشأن"
 
 #@ wp-blocked
 msgid "Last block on"
-msgstr ""
+msgstr "آخر حجب في"
 
 #@ wp-blocked
 msgid "No record of prior block."
-msgstr ""
+msgstr "لا يوجد سجل لحجب سابق"
 
 #@ wp-blocked
 msgid "Results for"
-msgstr ""
+msgstr "نتائج لـ"
 
 #@ wp-blocked
 msgid "Status"
-msgstr ""
+msgstr "وضع حالة"
 
 # @ wp-blocked
 msgid "Could not retrieve results."
