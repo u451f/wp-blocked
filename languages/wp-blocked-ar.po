@@ -3,68 +3,69 @@ msgstr ""
 "Project-Id-Version: wp-blocked\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-05-26 00:29:45+0000\n"
+"PO-Revision-Date: 2015-06-01 14:13+0100\n"
 "Last-Translator: u <u@451f.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Generator: CSL v1.x\n"
+"X-Generator: Poedit 1.6.10\n"
+"Language: ar\n"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "blocked"
 msgstr "محجوب"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "ok"
 msgstr "نعم"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "DNS error"
 msgstr "DNS خطأ نظام أسماء النطاقات"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "error"
 msgstr "خطأ"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "timeout"
 msgstr "نفذ وقت الاتصال بالشبكة"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Missing options."
 msgstr "خيارات مفقودة"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Test if this URL is blocked"
 msgstr "اختبر إذا كان هذا الرابط محجوب"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "ISP"
 msgstr "مزود خدمات انترنيت"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Result"
 msgstr "نتيجة"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Last check on"
 msgstr "آخر فحص بشأن"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Last block on"
 msgstr "آخر حجب في"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "No record of prior block."
 msgstr "لا يوجد سجل لحجب سابق"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Results for"
 msgstr "نتائج لـ"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "Status"
 msgstr "وضع حالة"
 
