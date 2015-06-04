@@ -115,8 +115,6 @@ function format_results($status) {
 				$output .= '<td>'.$readable_status.'</td>';
 				$output .= '<td>'.$last_blocked_timestamp.'</td>';
 				$output .= '<td>'.$first_blocked_timestamp.'</td>';
-				//$result['category']
-				//$result['blocktype']
 				$output .= '</tr>';
 			}
 			$output .= '</table>';
@@ -128,9 +126,11 @@ function format_results($status) {
 }
 
 function display_results() {
-	global $post;
+	global $post, $polylang;
+	$curLocale = pll_current_language('locale');
 	$options = get_option('wp_blocked_option_name');
-	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($option['resultspage'])) {
+
+	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($options["resultspage_$curLocale"])) {
 		if(isset($_GET['wp_blocked_url'])) {
 			$URL = sanitize_url($_GET['wp_blocked_url']);
 		} else {
@@ -149,11 +149,14 @@ add_filter( 'the_content', 'display_results', 4, 0);
 
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
+	global $polylang;
+	$curLocale = pll_current_language('locale');
+
 	$options = get_option('wp_blocked_option_name');
 	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
     	
-	$form = '<form method="POST" action="'.get_permalink($options['resultspage']).'" validate>';
+	$form = '<form method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate>';
 	$form .= '<input  placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
 	return $form;
 }
@@ -278,7 +281,7 @@ class wpBlockedSettingsPage {
 		}
 	} else {
 		add_settings_field(
-		    'resultspage',
+		    'resultspage_',
 		    'Page ID for results',
 		    array( $this, 'resultspage_status_callback' ),
 		    'wp-blocked-settings',
@@ -307,12 +310,12 @@ class wpBlockedSettingsPage {
 		foreach($languages as $lang) {
 			$locale = $lang->locale;
 			if( !empty( $input["resultspage_$locale"] ) ) {
-			    $input['resultspage'] = sanitize_text_field( $input["resultspage_$locale"] );
+			    $input["resultspage_$locale"] = sanitize_text_field( $input["resultspage_$locale"] );
 			}
 		}
 	} else {
-		if( !empty( $input['resultspage'] ) ) {
-		    $input['resultspage'] = sanitize_text_field( $input['resultspage'] );
+		if( !empty( $input['resultspage_'] ) ) {
+		    $input['resultspage_'] = sanitize_text_field( $input['resultspage_'] );
 		}
 	}
         return $input;
@@ -360,6 +363,7 @@ class wpBlockedSettingsPage {
     public function resultspage_status_callback() {
 	$languages = get_languages();
 	if($languages) {
+    		// fixme : do not have this show up twice
 		foreach($languages as $lang) {
 			printf(
 			    '<input type="number" id="resultspage_'.$lang->locale.'" name="wp_blocked_option_name[resultspage_'.$lang->locale.']" value="%s" class="regular-text ltr" required />',
