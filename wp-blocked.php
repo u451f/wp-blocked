@@ -276,7 +276,8 @@ class wpBlockedSettingsPage {
 			    'Page ID for results in '.$lang->name,
 			    array( $this, 'resultspage_status_callback' ),
 			    'wp-blocked-settings',
-			    'wp_blocked_section_general'
+			    'wp_blocked_section_general',
+			    array( 'locale' => $lang->locale )
 			);
 		}
 	} else {
@@ -360,22 +361,12 @@ class wpBlockedSettingsPage {
         );
     }
 
-    public function resultspage_status_callback() {
-	$languages = get_languages();
-	if($languages) {
-    		// fixme : do not have this show up twice
-		foreach($languages as $lang) {
-			printf(
-			    '<input type="number" id="resultspage_'.$lang->locale.'" name="wp_blocked_option_name[resultspage_'.$lang->locale.']" value="%s" class="regular-text ltr" required />',
-			    esc_attr( $this->options["resultspage_$lang->locale"])
-        		);
-		}
-	} else {
-		printf(
-		    '<input type="number" id="resultspage" name="wp_blocked_option_name[resultspage]" value="%s" class="regular-text ltr" required />',
-		    esc_attr( $this->options['resultspage'])
-        	);
-	}
+    public function resultspage_status_callback($args) {
+	$locale = $args['locale'];
+	printf(
+	    '<input type="number" id="resultspage_'.$locale.'" name="wp_blocked_option_name[resultspage_'.$locale.']" value="%s" class="regular-text ltr" required />',
+	    esc_attr( $this->options["resultspage_$locale"])
+	);
     }
 }
 
