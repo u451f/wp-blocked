@@ -118,6 +118,7 @@ function format_results($status) {
 				$output .= '</tr>';
 			}
 			$output .= '</table>';
+			$output .= '<p class="permlink"><a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result:", 'wp-blocked').' '.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'</a></p>';
 		}
 	} else {
 		$output .= '<p class="error">'.__("Could not retrieve results.", 'wp-blocked').'</p>';
