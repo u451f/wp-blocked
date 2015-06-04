@@ -159,6 +159,16 @@ function wp_blocked_url_shortcode() {
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
+function get_languages() {
+	// check configured languages via polylang plugin.
+	global $polylang;
+	if (isset($polylang)) {
+		$languages = $polylang->get_languages_list();
+		return $languages;
+	}
+}
+
+
 // Create configuration page for wp-admin. Each domain shall configure their API_KEY, API_EMAIL, URL_SUBMIT, URL_STATUS and results page.
 class wpBlockedSettingsPage {
     /**
@@ -254,20 +264,19 @@ class wpBlockedSettingsPage {
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
-        add_settings_field(
-            'resultspage',
-            'Page ID for results',
-            array( $this, 'resultspage_status_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_general'
-        );
-        add_settings_field(
-            'languages',
-            'Languages (separated by comma, use international abbreviations (ie. "fr" for french, "ar" for arabic.)',
-            array( $this, 'languages_status_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_general'
-        );
+
+	$languages = get_languages();
+	if($languages) {
+		foreach($languages as $lang) {
+			add_settings_field(
+			    'resultspage_'.$lang->locale,
+			    'Page ID for results in '.$lang->name,
+			    array( $this, 'resultspage_status_callback' ),
+			    'wp-blocked-settings',
+			    'wp_blocked_section_general'
+			);
+		}
+	}
     }
 
     /**
@@ -285,18 +294,14 @@ class wpBlockedSettingsPage {
             $input['URL_SUBMIT'] = esc_url( $input['URL_SUBMIT'] );
         if( !empty( $input['URL_STATUS'] ) )
             $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
-        if( !empty( $input['resultspage'] ) )
-            $input['resultspage'] = sanitize_text_field( $input['resultspage'] );
-        if( !empty( $input['languages'] ) ) {
-            $input['languages'] = sanitize_text_field(str_replace( ';', ',', $input['languages'] ));
-            $tmplanguages = explode( ',', $input['languages'] );
-            foreach($tmplanguages as $language) {
-                $tmp = sanitize_text_field( $language );
-                if(!empty($tmp)) {
-                    $clean_languages[] = $tmp;
-                }
-            }
-            $input['languages'] = implode(',', $clean_languages);
+	$languages = get_languages();
+	if($languages) {
+		foreach($languages as $lang) {
+			$locale = $lang->locale;
+			if( !empty( $input["resultspage_$locale"] ) ) {
+			    $input['resultspage'] = sanitize_text_field( $input["resultspage_$locale"] );
+			}
+		}
 	}
         return $input;
     }
