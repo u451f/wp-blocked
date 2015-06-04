@@ -358,17 +358,20 @@ class wpBlockedSettingsPage {
     }
 
     public function resultspage_status_callback() {
-        printf(
-            '<input type="number" id="resultspage" name="wp_blocked_option_name[resultspage]" value="%s" class="regular-text ltr" required />',
-            esc_attr( $this->options['resultspage'])
-        );
-    }
-
-    public function languages_status_callback() {
-        printf(
-            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" />',
-            esc_attr( $this->options['languages'])
-        );
+	$languages = get_languages();
+	if($languages) {
+		foreach($languages as $lang) {
+			printf(
+			    '<input type="number" id="resultspage_'.$lang->locale.'" name="wp_blocked_option_name[resultspage_'.$lang->locale.']" value="%s" class="regular-text ltr" required />',
+			    esc_attr( $this->options["resultspage_$lang->locale"])
+        		);
+		}
+	} else {
+		printf(
+		    '<input type="number" id="resultspage" name="wp_blocked_option_name[resultspage]" value="%s" class="regular-text ltr" required />',
+		    esc_attr( $this->options['resultspage'])
+        	);
+	}
     }
 }
 
