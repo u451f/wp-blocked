@@ -276,6 +276,14 @@ class wpBlockedSettingsPage {
 			    'wp_blocked_section_general'
 			);
 		}
+	} else {
+		add_settings_field(
+		    'resultspage',
+		    'Page ID for results',
+		    array( $this, 'resultspage_status_callback' ),
+		    'wp-blocked-settings',
+		    'wp_blocked_section_general'
+		);
 	}
     }
 
@@ -301,6 +309,10 @@ class wpBlockedSettingsPage {
 			if( !empty( $input["resultspage_$locale"] ) ) {
 			    $input['resultspage'] = sanitize_text_field( $input["resultspage_$locale"] );
 			}
+		}
+	} else {
+		if( !empty( $input['resultspage'] ) ) {
+		    $input['resultspage'] = sanitize_text_field( $input['resultspage'] );
 		}
 	}
         return $input;
