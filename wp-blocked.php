@@ -115,11 +115,10 @@ function format_results($status) {
 				$output .= '<td>'.$readable_status.'</td>';
 				$output .= '<td>'.$last_blocked_timestamp.'</td>';
 				$output .= '<td>'.$first_blocked_timestamp.'</td>';
-				//$result['category']
-				//$result['blocktype']
 				$output .= '</tr>';
 			}
 			$output .= '</table>';
+			$output .= '<p class="permlink"><a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result:", 'wp-blocked').' '.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'</a></p>';
 		}
 	} else {
 		$output .= '<p class="error">'.__("Could not retrieve results.", 'wp-blocked').'</p>';
@@ -128,9 +127,11 @@ function format_results($status) {
 }
 
 function display_results() {
-	global $post;
+	global $post, $polylang;
+	$curLocale = pll_current_language('locale');
 	$options = get_option('wp_blocked_option_name');
-	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($option['resultspage'])) {
+
+	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($options["resultspage_$curLocale"])) {
 		if(isset($_GET['wp_blocked_url'])) {
 			$URL = sanitize_url($_GET['wp_blocked_url']);
 		} else {
@@ -149,15 +150,28 @@ add_filter( 'the_content', 'display_results', 4, 0);
 
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
+	global $polylang;
+	$curLocale = pll_current_language('locale');
+
 	$options = get_option('wp_blocked_option_name');
 	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
     	
-	$form = '<form method="POST" action="'.get_permalink($options['resultspage']).'" validate>';
+	$form = '<form method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate>';
 	$form .= '<input  placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
+
+function get_languages() {
+	// check configured languages via polylang plugin.
+	global $polylang;
+	if (isset($polylang)) {
+		$languages = $polylang->get_languages_list();
+		return $languages;
+	}
+}
+
 
 // Create configuration page for wp-admin. Each domain shall configure their API_KEY, API_EMAIL, URL_SUBMIT, URL_STATUS and results page.
 class wpBlockedSettingsPage {
@@ -254,20 +268,28 @@ class wpBlockedSettingsPage {
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
-        add_settings_field(
-            'resultspage',
-            'Page ID for results',
-            array( $this, 'resultspage_status_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_general'
-        );
-        add_settings_field(
-            'languages',
-            'Languages (separated by comma, use international abbreviations (ie. "fr" for french, "ar" for arabic.)',
-            array( $this, 'languages_status_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_general'
-        );
+
+	$languages = get_languages();
+	if($languages) {
+		foreach($languages as $lang) {
+			add_settings_field(
+			    'resultspage_'.$lang->locale,
+			    'Page ID for results in '.$lang->name,
+			    array( $this, 'resultspage_status_callback' ),
+			    'wp-blocked-settings',
+			    'wp_blocked_section_general',
+			    array( 'locale' => $lang->locale )
+			);
+		}
+	} else {
+		add_settings_field(
+		    'resultspage_',
+		    'Page ID for results',
+		    array( $this, 'resultspage_status_callback' ),
+		    'wp-blocked-settings',
+		    'wp_blocked_section_general'
+		);
+	}
     }
 
     /**
@@ -285,18 +307,18 @@ class wpBlockedSettingsPage {
             $input['URL_SUBMIT'] = esc_url( $input['URL_SUBMIT'] );
         if( !empty( $input['URL_STATUS'] ) )
             $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
-        if( !empty( $input['resultspage'] ) )
-            $input['resultspage'] = sanitize_text_field( $input['resultspage'] );
-        if( !empty( $input['languages'] ) ) {
-            $input['languages'] = sanitize_text_field(str_replace( ';', ',', $input['languages'] ));
-            $tmplanguages = explode( ',', $input['languages'] );
-            foreach($tmplanguages as $language) {
-                $tmp = sanitize_text_field( $language );
-                if(!empty($tmp)) {
-                    $clean_languages[] = $tmp;
-                }
-            }
-            $input['languages'] = implode(',', $clean_languages);
+	$languages = get_languages();
+	if($languages) {
+		foreach($languages as $lang) {
+			$locale = $lang->locale;
+			if( !empty( $input["resultspage_$locale"] ) ) {
+			    $input["resultspage_$locale"] = sanitize_text_field( $input["resultspage_$locale"] );
+			}
+		}
+	} else {
+		if( !empty( $input['resultspage_'] ) ) {
+		    $input['resultspage_'] = sanitize_text_field( $input['resultspage_'] );
+		}
 	}
         return $input;
     }
@@ -340,18 +362,12 @@ class wpBlockedSettingsPage {
         );
     }
 
-    public function resultspage_status_callback() {
-        printf(
-            '<input type="number" id="resultspage" name="wp_blocked_option_name[resultspage]" value="%s" class="regular-text ltr" required />',
-            esc_attr( $this->options['resultspage'])
-        );
-    }
-
-    public function languages_status_callback() {
-        printf(
-            '<input type="text" id="languages" name="wp_blocked_option_name[languages]" value="%s" class="regular-text ltr" />',
-            esc_attr( $this->options['languages'])
-        );
+    public function resultspage_status_callback($args) {
+	$locale = $args['locale'];
+	printf(
+	    '<input type="number" id="resultspage_'.$locale.'" name="wp_blocked_option_name[resultspage_'.$locale.']" value="%s" class="regular-text ltr" required />',
+	    esc_attr( $this->options["resultspage_$locale"])
+	);
     }
 }
 
