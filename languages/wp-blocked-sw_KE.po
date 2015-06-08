@@ -14,60 +14,60 @@ msgstr ""
 
 #@ wp-blocked
 msgid "blocked"
-msgstr ""
+msgstr "imezuliwa"
 
 #@ wp-blocked
 msgid "ok"
-msgstr ""
+msgstr "sawa"
 
 #@ wp-blocked
 msgid "DNS error"
-msgstr ""
+msgstr "kosa la DNS"
 
 #@ wp-blocked
 msgid "error"
-msgstr ""
+msgstr "kosa"
 
 #@ wp-blocked
 msgid "timeout"
-msgstr ""
+msgstr "saa umeisha"
 
 #@ wp-blocked
 msgid "Missing options."
-msgstr ""
+msgstr "Chaguzi kukosa"
 
 #@ wp-blocked
 msgid "Test if this URL is blocked"
-msgstr ""
+msgstr "Jaribu kama ukurasa imezuliwa"
 
 #@ wp-blocked
 msgid "ISP"
-msgstr ""
+msgstr "Watoa Huduma ya Mtandao"
 
 #@ wp-blocked
 msgid "Result"
-msgstr ""
+msgstr "Matokeo"
 
 #@ wp-blocked
 msgid "Last check on"
-msgstr ""
+msgstr "Siku ulijaribiwa mwisho"
 
 #@ wp-blocked
 msgid "Last block on"
-msgstr ""
+msgstr "Siku ilizuliwa mwisho"
 
 #@ wp-blocked
 msgid "No record of prior block."
-msgstr ""
+msgstr "Hakuna rekodi ya kuzuliwa"
 
 #@ wp-blocked
 msgid "Results for"
-msgstr ""
+msgstr "Matokeo ya"
 
 #@ wp-blocked
 msgid "Status"
-msgstr ""
+msgstr "Hadhi"
 
 # @ wp-blocked
 msgid "Could not retrieve results."
-msgstr "" 
+msgstr "Hatokeo haikuweza kupatikana" 
