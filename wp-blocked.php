@@ -100,6 +100,7 @@ function format_results($status) {
 				else if($result['status'] == 'error') {$readable_status = __('error', 'wp-blocked');}
 				else if($result['status'] == 'dns-error') {$readable_status = __('DNS error', 'wp-blocked');}
 				else if($result['status'] == 'timeout') {$readable_status = __('timeout', 'wp-blocked');}
+				else if($result['status'] == 'unknown') {$readable_status = __('unknown', 'wp-blocked');}
 
 				// create css classes for rows
 				$css_class = strtolower($result['status']);
