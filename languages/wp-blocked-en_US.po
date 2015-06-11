@@ -33,6 +33,10 @@ msgid "timeout"
 msgstr ""
 
 #@ wp-blocked
+msgid "unknown"
+msgstr ""
+
+#@ wp-blocked
 msgid "Missing options."
 msgstr ""
 
