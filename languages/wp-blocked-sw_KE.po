@@ -34,6 +34,10 @@ msgid "timeout"
 msgstr "saa umeisha"
 
 # @ wp-blocked
+msgid "unknown"
+msgstr "haijulikani"
+
+# @ wp-blocked
 msgid "Missing options."
 msgstr "Chaguzi kukosa"
 
