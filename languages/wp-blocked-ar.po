@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wp-blocked\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-06-01 14:13+0100\n"
+"PO-Revision-Date: 2015-06-11 09:25+0100\n"
 "Last-Translator: u <u@451f.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,10 @@ msgstr "خطأ"
 # @ wp-blocked
 msgid "timeout"
 msgstr "نفذ وقت الاتصال بالشبكة"
+
+# @ wp-blocked
+msgid "unknown"
+msgstr "غير معروف"
 
 # @ wp-blocked
 msgid "Missing options."
