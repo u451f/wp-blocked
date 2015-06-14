@@ -168,6 +168,13 @@ function wp_blocked_url_shortcode() {
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
+// implement a way to display statistics of blocked URLs
+// todo: implement the function in the wrapper and finish the shortcode, add default CSS file for stats.
+function wp_blocked_statistics_shortcode() {
+	return $stats;
+}
+add_shortcode( 'blocked_display_stats', 'wp_blocked_statistics_shortcode' );
+
 function get_languages() {
 	// check configured languages via polylang plugin.
 	global $polylang;
