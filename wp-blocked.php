@@ -129,7 +129,9 @@ function format_results($status) {
 
 function display_results() {
 	global $post, $polylang;
-	$curLocale = pll_current_language('locale');
+	if (function_exists('pll_current_language') {
+		$curLocale = pll_current_language('locale');
+	}
 	$options = get_option('wp_blocked_option_name');
 
 	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($options["resultspage_$curLocale"])) {
@@ -152,7 +154,9 @@ add_filter( 'the_content', 'display_results', 4, 0);
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
 	global $polylang;
-	$curLocale = pll_current_language('locale');
+	if (function_exists('pll_current_language') {
+		$curLocale = pll_current_language('locale');
+	}
 
 	$options = get_option('wp_blocked_option_name');
 	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
