@@ -7,6 +7,7 @@ Tested up to: 4.2.2
 Stable tag: 1.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Suggests: polylang
 
 Censorship monitoring: This plugin provides a search form to check if URLs are blocked or censored. Results are provided via the Blocking Middleware API.
 
