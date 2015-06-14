@@ -2,6 +2,7 @@
 
 A wordpress plugin to check for blocked URLs querying the Blocked Middleware by OpenRightGroup. 
 Depends on php-lib-blocked-url (included) and php5-curl.
+We also use the polylang Wordpress plugin for l10n, but it is not required.
 
 # BlockedUrl
 
