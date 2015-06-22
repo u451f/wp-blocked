@@ -129,7 +129,7 @@ function format_results($status) {
 
 function display_results() {
 	global $post, $polylang;
-	if (function_exists('pll_current_language') {
+	if (function_exists('pll_current_language')) {
 		$curLocale = pll_current_language('locale');
 	}
 	$options = get_option('wp_blocked_option_name');
@@ -154,7 +154,7 @@ add_filter( 'the_content', 'display_results', 4, 0);
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
 	global $polylang;
-	if (function_exists('pll_current_language') {
+	if (function_exists('pll_current_language')) {
 		$curLocale = pll_current_language('locale');
 	}
 
@@ -162,7 +162,7 @@ function wp_blocked_url_shortcode() {
 	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
     	
-	$form = '<form method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate>';
+	$form = '<form class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate>';
 	$form .= '<input  placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
 	return $form;
 }
