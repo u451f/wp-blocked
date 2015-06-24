@@ -162,11 +162,17 @@ function wp_blocked_url_shortcode() {
 	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
     	
-	$form = '<form class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate>';
-	$form .= '<input  placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
+	$form = '<form class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate autocomplete="on">';
+	$form .= '<input placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required onblur="checkURL(this)" /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
+
+// call javascript
+function blocked_scripts() {
+	wp_enqueue_script( 'blocked', plugins_url('', __FILE__).'/js/blocked.js', 0, 0, true );
+}
+add_action( 'wp_enqueue_scripts', 'blocked_scripts' );
 
 // implement a way to display statistics of blocked URLs
 // todo: implement the function in the wrapper and finish the shortcode, add default CSS file for stats.
