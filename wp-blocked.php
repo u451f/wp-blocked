@@ -46,7 +46,18 @@ function fetch_results($URL, $SSL=false) {
 		// throw error
 		echo __("Missing options.", 'wp-blocked');
 	} else {
-		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $SSL, $options['URL_SUBMIT'], $options['URL_STATUS'] ); // false = disable SSL peer verification
+        
+        // API change in BlockedURL 0.2.x => 0.3.0!
+        // To simulate beahviour, strip out houst ip or host name from URL_SUBMIT
+        // TODO: remove this regex hack and create a simple 'HOST' option
+        $matches = array();
+        $preg_result = preg_match( '/:\/{2}([^\/]+)\//', $options['URL_SUBMIT'], $matches );
+        if ( $preg_result == 0 ){
+            echo __("cannot extract IP or HOSTNAME from URL_SUBMIT", 'wp-blocked');
+        }
+        $HOST = $matches[1];
+
+        $blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $HOST, $SSL ); // false = disable SSL peer verification
 
 		// push your URL to network, and fetch response
 		$pushed = $blocked->push_request()->push_response();
