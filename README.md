@@ -20,7 +20,7 @@ BlockedUrl
 
 ## VERSION
 
-0.2.5
+0.3.0
 
 ## DESCRIPTION
 
@@ -43,8 +43,8 @@ Project API / Blocked Middleware.
 
     require "lib/BlockedUrl.php";
 
-    $blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>' );
-    $blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>', false ); // disable SSL peer verification
+    $blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>', <HOST> );
+    $blocked = new BlockedUrl ( '<API_KEY>', '<API_EMAIL>', '<URL_TO_TEST>', <HOST>, false ); // disable SSL peer verification
 
     // push your URL to network, and fetch response
     my $pushed = $blocked->push_request()->push_response();
@@ -78,10 +78,16 @@ Project API / Blocked Middleware.
 
 ## METHODS
 
-### constructor( string $api_key, string, $api_email, string $url, boolean $ssl_verification = true )
+### constructor( string $api_key, string, $api_email, string $url, string $host, boolean $ssl_verification = true )
 
-$api_key, $api_email and the $url are mandatory parameters. Set
+$api_key, $api_email, $host and the $url are mandatory parameters. Set
 $ssl_verification to false if you wish to call to hosts with self-signed SSL certificates.
+
+The $host is either an IP or hostname string identifying the machine on which the server to query runs on. Currently only API Version 1.2 is supported. URL maming scheme is:
+
+`https://<HOST>/1.2/<API-ENDPOINT>` 
+
+whereas "1.2" and supported endpoints are hard-coded.
 
 ### url( <string> )
 
@@ -98,6 +104,13 @@ Returns $this, throws exception on all errors.
 
 Returns the parsed JSON answer of last successful push_request()
 
+### get_daily_stats([ int ])
+
+Calls to daily-stats facility. Returns object instance. To get reponse, call to
+daily_stats_response() afterwards
+
+`$blocked->get_daily_stats( 10 )->daily_stats_response()`
+
 ### get_status()
 
 Tries to get the status for current URL from network. If this fails with
@@ -109,3 +122,9 @@ Returns $this, throws exception on all other errors.
 ### status_response()
 
 Returns the parsed JSON answer of last successful get_status()
+
+### daily_stats_response()
+
+Returns the parsed JSON anwer of last successful get_daily_stats()
+
+
