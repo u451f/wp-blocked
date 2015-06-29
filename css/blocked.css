@@ -1,27 +1,38 @@
-.item {
-	margin-bottom: 1em;
+.blocked-item {
+	margin-bottom: 2em;
 	overflow: hidden;
 }
 
-.item .date {
+.blocked-item .date {
 	display: block;
 	font-size: 1.2em;
 }
 
-.item .blocked_sites {
-	font-size: 3em;
+.blocked-item .blocked_sites {
+	font-size: 2.6em;
 	font-weight: bold;
+	line-height: 1em;
 }
 
-.item .blocked_sites_percent {
+.blocked-item .blocked_sites i {
+	display: block;
+	font-size: 0.65em;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.blocked-item .blocked_sites_percent {
 	float: left;
 	margin-right: 1em;
 	display: block;
 	width: 100px;
-	height: 60px;
+	height: 65px;
+	padding-top: 35px;
+	color: #de2d3c;
+	font-size: 1.5em;
 	text-align: center;
 	border-radius: 50px;
-	border: 2px dotted #ccc;
+	border: 2px dashed #eee;
 	-moz-transform: rotate(360deg);
 	-ms-transform: rotate(360deg);
 	-o-transform: rotate(360deg);
@@ -29,5 +40,4 @@
 	-moz-transition-duration: 0.4s;
 	-webkit-transition-duration: 0.4s;
 	transition-duration: 0.4s;
-	padding-top: 40px;
 }

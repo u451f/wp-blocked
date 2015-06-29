@@ -217,7 +217,7 @@ function wp_blocked_statistics_shortcode() {
 		foreach ($output['stats'] as $date => $item) {
 			$percent = 100/100000*$item['blocked'];
 			$percent = number_format((float)$percent, 2, '.', '');
-			$html_output .= '<div class="item">';
+			$html_output .= '<div class="blocked-item">';
 			$html_output .= '<span class="blocked_sites_percent">'.$percent.'%</span>';
 			$html_output .= '<span class="date">'.$date.'</span>';
 			$html_output .= '<span class="blocked_sites">'.$item['blocked'].' <i>'.__('blocked sites', 'wp-blocked').'</i></span>';
