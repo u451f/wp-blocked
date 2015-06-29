@@ -1,0 +1,33 @@
+.item {
+	margin-bottom: 1em;
+	overflow: hidden;
+}
+
+.item .date {
+	display: block;
+	font-size: 1.2em;
+}
+
+.item .blocked_sites {
+	font-size: 3em;
+	font-weight: bold;
+}
+
+.item .blocked_sites_percent {
+	float: left;
+	margin-right: 1em;
+	display: block;
+	width: 100px;
+	height: 60px;
+	text-align: center;
+	border-radius: 50px;
+	border: 2px dotted #ccc;
+	-moz-transform: rotate(360deg);
+	-ms-transform: rotate(360deg);
+	-o-transform: rotate(360deg);
+	-webkit-transform: rotate(360deg);
+	-moz-transition-duration: 0.4s;
+	-webkit-transition-duration: 0.4s;
+	transition-duration: 0.4s;
+	padding-top: 40px;
+}

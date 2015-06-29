@@ -185,14 +185,14 @@ function wp_blocked_url_shortcode() {
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
-// call javascript
+// call javascript & style
 function blocked_scripts() {
+	wp_enqueue_style( 'blocked', plugins_url('', __FILE__).'/css/blocked.css' );
 	wp_enqueue_script( 'blocked', plugins_url('', __FILE__).'/js/blocked.js', 0, 0, true );
 }
 add_action( 'wp_enqueue_scripts', 'blocked_scripts' );
 
 // implement a way to display statistics of blocked URLs
-// todo: implement the function in the wrapper and finish the shortcode, add default CSS file for stats.
 function wp_blocked_statistics_shortcode() {
 	global $polylang;
 	if (function_exists('pll_current_language')) {
@@ -218,9 +218,9 @@ function wp_blocked_statistics_shortcode() {
 			$percent = 100/100000*$item['blocked'];
 			$percent = number_format((float)$percent, 2, '.', '');
 			$html_output .= '<div class="item">';
-			$html_output .= '<span class="date">'.$date.'</span>';
-			$html_output .= '<span class="blocked_sites">'.$item['blocked'].'</span>';
 			$html_output .= '<span class="blocked_sites_percent">'.$percent.'%</span>';
+			$html_output .= '<span class="date">'.$date.'</span>';
+			$html_output .= '<span class="blocked_sites">'.$item['blocked'].' <i>'.__('blocked sites', 'wp-blocked').'</i></span>';
 			$html_output .= '</div>';
 		}
 	}
