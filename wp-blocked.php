@@ -39,25 +39,17 @@ add_action('plugins_loaded', 'wp_blocked_init');
 function fetch_results($URL, $SSL=false, $fetch_stats=false) {
 	require_once "lib/BlockedUrl.php";
 
-	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via WP options
+	// load $API_KEY, $API_EMAIL, $HOST, $URL_STATUS via WP options
 	$options = get_option('wp_blocked_option_name');
 
-	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['URL_SUBMIT']) OR empty($options['URL_STATUS'])) {
+	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['HOST'])) {
 		// throw error
 		echo __("Missing options.", 'wp-blocked');
 	} else {
         
         // API change in BlockedURL 0.2.x => 0.3.0!
-        // To simulate beahviour, strip out houst ip or host name from URL_SUBMIT
-        // TODO: remove this regex hack and create a simple 'HOST' option
-        $matches = array();
-        $preg_result = preg_match( '/:\/{2}([^\/]+)\//', $options['URL_SUBMIT'], $matches );
-        if ( $preg_result == 0 ){
-            echo __("cannot extract IP or HOSTNAME from URL_SUBMIT", 'wp-blocked');
-        }
-        $HOST = $matches[1];
 
-        $blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $HOST, $SSL ); // false = disable SSL peer verification
+        $blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL ); // false = disable SSL peer verification
 
 		// push your URL to network, and fetch response
 		$pushed = $blocked->push_request()->push_response();
@@ -238,7 +230,7 @@ function get_languages() {
 }
 
 
-// Create configuration page for wp-admin. Each domain shall configure their API_KEY, API_EMAIL, URL_SUBMIT, URL_STATUS and results page.
+// Create configuration page for wp-admin. Each domain shall configure their API_KEY, API_EMAIL, HOST and results page.
 class wpBlockedSettingsPage {
     /**
      * Holds the values to be used in the fields callbacks
@@ -320,16 +312,9 @@ class wpBlockedSettingsPage {
             'wp_blocked_section_general'
         );
         add_settings_field(
-            'URL_SUBMIT',
-            'Submit URL',
-            array( $this, 'url_submit_callback' ),
-            'wp-blocked-settings',
-            'wp_blocked_section_general'
-        );
-        add_settings_field(
-            'URL_STATUS',
-            'Status URL',
-            array( $this, 'url_status_callback' ),
+            'HOST',
+            'HOST URL or IP',
+            array( $this, 'host_callback' ),
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
@@ -368,10 +353,8 @@ class wpBlockedSettingsPage {
             $input['API_KEY'] = sanitize_text_field( $input['API_KEY'] );
         if( !empty( $input['API_EMAIL'] ) )
             $input['API_EMAIL'] = sanitize_email( $input['API_EMAIL'] );
-        if( !empty( $input['URL_SUBMIT'] ) )
-            $input['URL_SUBMIT'] = esc_url( $input['URL_SUBMIT'] );
-        if( !empty( $input['URL_STATUS'] ) )
-            $input['URL_STATUS'] = esc_url( $input['URL_STATUS'] );
+        if( !empty( $input['HOST'] ) )
+            $input['HOST'] = sanitize_text_field( $input['HOST'] );
 	$languages = get_languages();
 	if($languages) {
 		foreach($languages as $lang) {
@@ -413,17 +396,10 @@ class wpBlockedSettingsPage {
         );
     }
 
-    public function url_submit_callback() {
+    public function host_callback() {
         printf(
-            '<input type="url" id="URL_SUBMIT" name="wp_blocked_option_name[URL_SUBMIT]" value="%s" class="regular-text ltr" required />',
-            esc_attr( $this->options['URL_SUBMIT'])
-        );
-    }
-
-    public function url_status_callback() {
-        printf(
-            '<input type="url" id="URL_STATUS" name="wp_blocked_option_name[URL_STATUS]" value="%s" class="regular-text ltr" required />',
-            esc_attr( $this->options['URL_STATUS'])
+            '<input type="text" id="HOST" name="wp_blocked_option_name[HOST]" value="%s" class="regular-text ltr" required />',
+            esc_attr( $this->options['HOST'])
         );
     }
 
