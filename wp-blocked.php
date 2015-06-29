@@ -36,7 +36,7 @@ function wp_blocked_init() {
 add_action('plugins_loaded', 'wp_blocked_init');
 
 // fetch results from server
-function fetch_results($URL, $SSL=false) {
+function fetch_results($URL, $SSL=false, $fetch_stats=false) {
 	require_once "lib/BlockedUrl.php";
 
 	// load $API_KEY, $API_EMAIL, $URL_SUBMIT, $URL_STATUS via WP options
@@ -92,7 +92,13 @@ function fetch_results($URL, $SSL=false) {
 		// )
 
 		// return $status;
-		return format_results($status);		
+
+		if($fetch_stats === true) {
+			$stats = $blocked->get_daily_stats(10)->daily_stats_response();
+			return $stats;
+		}
+
+		return format_results($status);	
 	}
 }
 
@@ -188,7 +194,37 @@ add_action( 'wp_enqueue_scripts', 'blocked_scripts' );
 // implement a way to display statistics of blocked URLs
 // todo: implement the function in the wrapper and finish the shortcode, add default CSS file for stats.
 function wp_blocked_statistics_shortcode() {
-	return $stats;
+	global $polylang;
+	if (function_exists('pll_current_language')) {
+		$curLocale = pll_current_language('locale');
+	}
+
+	if(isset($_GET['wp_blocked_url'])) {
+		$URL = sanitize_url($_GET['wp_blocked_url']);
+	} else {
+		$URL = sanitize_url($_POST['wp_blocked_url']);
+	}
+
+	// check if URL is SSL and if yes, then set $SSL to true
+	if(substr($URL, 0, 4) == "https") 
+		$SSL = true; 
+	else 
+		$SSL = false;
+	$output = fetch_results($URL, $SSL, true);
+
+	if($output['success'] == 1) {
+		$html_output = '<h2 class="widget-title">'.__('Statistics', 'wp-blocked').'</h2>';
+		foreach ($output['stats'] as $date => $item) {
+			$percent = 100/100000*$item['blocked'];
+			$percent = number_format((float)$percent, 2, '.', '');
+			$html_output .= '<div class="item">';
+			$html_output .= '<span class="date">'.$date.'</span>';
+			$html_output .= '<span class="blocked_sites">'.$item['blocked'].'</span>';
+			$html_output .= '<span class="blocked_sites_percent">'.$percent.'%</span>';
+			$html_output .= '</div>';
+		}
+	}
+	echo $html_output;
 }
 add_shortcode( 'blocked_display_stats', 'wp_blocked_statistics_shortcode' );
 
