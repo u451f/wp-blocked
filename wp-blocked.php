@@ -49,7 +49,7 @@ function fetch_results($URL, $SSL=false, $fetch_stats=false) {
         
         // API change in BlockedURL 0.2.x => 0.3.0!
 
-        $blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL ); // false = disable SSL peer verification
+		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL ); // false = disable SSL peer verification
 
 		// push your URL to network, and fetch response
 		$pushed = $blocked->push_request()->push_response();
@@ -85,12 +85,24 @@ function fetch_results($URL, $SSL=false, $fetch_stats=false) {
 
 		// return $status;
 
-		if($fetch_stats === true) {
-			$stats = $blocked->get_daily_stats(10)->daily_stats_response();
-			return $stats;
-		}
-
 		return format_results($status);	
+	}
+}
+
+function fetch_stats() {
+	require_once "lib/BlockedUrl.php";
+
+	// load $API_KEY, $API_EMAIL, $HOST, $URL_STATUS via WP options
+	$options = get_option('wp_blocked_option_name');
+
+	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['HOST'])) {
+		// throw error
+		echo __("Missing options.", 'wp-blocked');
+	} else {
+		$URL = "http://blocked.org.uk";
+		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL=false );
+		$stats = $blocked->get_daily_stats(5)->daily_stats_response();
+		return $stats;
 	}
 }
 
@@ -177,13 +189,6 @@ function wp_blocked_url_shortcode() {
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
 
-// call javascript & style
-function blocked_scripts() {
-	wp_enqueue_style( 'blocked', plugins_url('', __FILE__).'/css/blocked.css' );
-	wp_enqueue_script( 'blocked', plugins_url('', __FILE__).'/js/blocked.js', 0, 0, true );
-}
-add_action( 'wp_enqueue_scripts', 'blocked_scripts' );
-
 // implement a way to display statistics of blocked URLs
 function wp_blocked_statistics_shortcode() {
 	global $polylang;
@@ -197,16 +202,10 @@ function wp_blocked_statistics_shortcode() {
 		$URL = sanitize_url($_POST['wp_blocked_url']);
 	}
 
-	// check if URL is SSL and if yes, then set $SSL to true
-	if(substr($URL, 0, 4) == "https") 
-		$SSL = true; 
-	else 
-		$SSL = false;
-	$output = fetch_results($URL, $SSL, true);
-
-	if($output['success'] == 1) {
+	$stats = fetch_stats();
+	if($stats['success'] == 1) {
 		$html_output = '<h2 class="widget-title">'.__('Statistics', 'wp-blocked').'</h2>';
-		foreach ($output['stats'] as $date => $item) {
+		foreach ($stats['stats'] as $date => $item) {
 			$percent = 100/100000*$item['blocked'];
 			$percent = number_format((float)$percent, 2, '.', '');
 			$html_output .= '<div class="blocked-item">';
@@ -219,6 +218,13 @@ function wp_blocked_statistics_shortcode() {
 	echo $html_output;
 }
 add_shortcode( 'blocked_display_stats', 'wp_blocked_statistics_shortcode' );
+
+// call javascript & style
+function blocked_scripts() {
+	wp_enqueue_style( 'blocked', plugins_url('', __FILE__).'/css/blocked.css' );
+	wp_enqueue_script( 'blocked', plugins_url('', __FILE__).'/js/blocked.js', 0, 0, true );
+}
+add_action( 'wp_enqueue_scripts', 'blocked_scripts' );
 
 function get_languages() {
 	// check configured languages via polylang plugin.
