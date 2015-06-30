@@ -140,7 +140,11 @@ function format_results($status) {
 				$output .= '</tr>';
 			}
 			$output .= '</table>';
-			$output .= '<p class="permlink"><a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result:", 'wp-blocked').' '.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'</a></p>';
+			$output .= '<p class="permlink">
+				<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result:", 'wp-blocked').' '.$status['url'].'</a>
+				 <a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a>
+				 <a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
+				</p>';
 		}
 	} else {
 		$output .= '<p class="error">'.__("Could not retrieve results.", 'wp-blocked').'</p>';
