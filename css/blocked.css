@@ -1,3 +1,15 @@
+.permlink a {
+	display: inline-block;
+	border-right: 1px solid;
+	padding: 0 1em 0 0;
+	margin-right: 1em;
+}
+
+.permlink a:last-child {
+	border: none;
+	margin: 0;
+}
+
 .blocked-item {
 	margin-bottom: 2em;
 	overflow: hidden;
