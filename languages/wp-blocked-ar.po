@@ -76,3 +76,23 @@ msgstr "وضع حالة"
 # @ wp-blocked
 msgid "Could not retrieve results."
 msgstr ""
+
+# @ wp-blocked
+msgid "Share on Facebook"
+msgstr ""
+
+# @ wp-blocked
+msgid "Share on Twitter"
+msgstr ""
+
+# @ wp-blocked
+msgid "Permalink for this result"
+msgstr ""
+
+# @ wp-blocked
+msgid "Statistics"
+msgstr ""
+
+# @ wp-blocked
+msgid "blocked sites"
+msgstr ""
