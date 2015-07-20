@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wp-blocked\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-06-08 17:40+0100\n"
+"PO-Revision-Date: 2015-07-20 13:13+0100\n"
 "Last-Translator: u <u@451f.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -79,20 +79,20 @@ msgstr "Hatokeo haikuweza kupatikana"
 
 # @ wp-blocked
 msgid "Share on Facebook"
-msgstr ""
+msgstr "Sambaza katika Facebook"
 
 # @ wp-blocked
 msgid "Share on Twitter"
-msgstr ""
+msgstr "Sambaza kwa Twitter"
 
 # @ wp-blocked
 msgid "Permalink for this result"
-msgstr ""
+msgstr "Viungo vya matokeo hii"
 
 # @ wp-blocked
 msgid "Statistics"
-msgstr ""
+msgstr "Takwimu"
 
 # @ wp-blocked
 msgid "blocked sites"
-msgstr ""
+msgstr "tovuti ambazo zimefungwa"
