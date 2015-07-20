@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wp-blocked\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-06-11 09:25+0100\n"
+"PO-Revision-Date: 2015-07-20 13:11+0100\n"
 "Last-Translator: u <u@451f.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -75,24 +75,24 @@ msgstr "وضع حالة"
 
 # @ wp-blocked
 msgid "Could not retrieve results."
-msgstr ""
+msgstr "يتعذر استعادةالنتائج"
 
 # @ wp-blocked
 msgid "Share on Facebook"
-msgstr ""
+msgstr "شارك على فيسبوك"
 
 # @ wp-blocked
 msgid "Share on Twitter"
-msgstr ""
+msgstr "شارك على تويتر"
 
 # @ wp-blocked
 msgid "Permalink for this result"
-msgstr ""
+msgstr "الرابط الدائم لهذه النتيجة"
 
 # @ wp-blocked
 msgid "Statistics"
-msgstr ""
+msgstr "إحصائيات"
 
 # @ wp-blocked
 msgid "blocked sites"
-msgstr ""
+msgstr "مواقع محجوبة"
