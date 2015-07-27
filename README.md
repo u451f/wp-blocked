@@ -37,6 +37,7 @@ Project API / Blocked Middleware.
  * Configure the plugin through the wp-admin interface -> Settings -> WP Blocked Settings. This is where you will enter your API credentials.
  * You can add the `[blocked_test_url]` shortcode whereever you want to provide a search form for blocked URLs.
  * In the settings, you'll need to provide a page ID to which the search form redirects in order to display the results. On this page, please add the `[blocked_test_url]` shortcode.
+ * You can add the `[blocked_display_stats]` shortcodes anywhere to display the statistics of all blocked sites (test provided by API against a set of the 100 most important websites ranked on Alexa)
  * The main plugin file is wp-blocked.php. It uses everything in lib/ and language/.
 	
 ### Simple PHP implementation
