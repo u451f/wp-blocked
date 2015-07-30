@@ -36,73 +36,23 @@ function wp_blocked_init() {
 add_action('plugins_loaded', 'wp_blocked_init');
 
 // fetch results from server
-function fetch_results($URL, $SSL=false, $fetch_stats=false) {
+function fetch_results($URL, $SSL=false, $fetch_stats=false, $options) {
 	require_once "lib/BlockedUrl.php";
-
-	// load $API_KEY, $API_EMAIL, $HOST, $URL_STATUS via WP options
-	$options = get_option('wp_blocked_option_name');
 
 	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['HOST'])) {
 		// throw error
 		echo __("Missing options.", 'wp-blocked');
 	} else {
-        
         // API change in BlockedURL 0.2.x => 0.3.0!
-
 		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL ); // false = disable SSL peer verification
 
 		// push your URL to network, and fetch response
 		$pushed = $blocked->push_request()->push_response();
-		// print_r($pushed);
-
-		// yields:
-		// array(
-		//       "hash"    => string,
-		//       "queued"  => bool,
-		//       "success" => bool,
-		//       "uuid"    => int
-		// )
-
+	
 		// retrieve URL status
 		$status = $blocked->get_status()->status_response();
-		// print_r($status);
-
-		// yields:
-		// array(
-		//       "url-status" => string( "ok"|"blocked" ),
-		//       "categories" => array( string ),
-		//       "results"    => array(
-		//            blocktype               => 'what',
-		//            category                => 'ever',
-		//            first_blocked_timestamp => '2015-03-19 12:39:48',
-		//            last_blocked_timestamp  => '2015-03-19 12:39:48',
-		//            network_name            => 'Fake ISP Ltd',
-		//            status                  => 'ok',
-		//            status_timestamp        => '2015-04-30 22:46:54'
-		//               ...
-		//       )
-		// )
-
-		// return $status;
 
 		return format_results($status);	
-	}
-}
-
-function fetch_stats() {
-	require_once "lib/BlockedUrl.php";
-
-	// load $API_KEY, $API_EMAIL, $HOST, $URL_STATUS via WP options
-	$options = get_option('wp_blocked_option_name');
-
-	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['HOST'])) {
-		// throw error
-		echo __("Missing options.", 'wp-blocked');
-	} else {
-		$URL = "http://blocked.org.uk";
-		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL=false );
-		$stats = $blocked->get_daily_stats(5)->daily_stats_response();
-		return $stats;
 	}
 }
 
@@ -111,45 +61,57 @@ function format_results($status) {
 	if($status['success'] == 1) {
 		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>';
 		$output .= '<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>';
+
+		// create table
 		if(count($status['results']) > 0) {
-			$output .= '<table class="url-results">';
-			$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>';
-			foreach ($status['results'] as $result) {
-				// load translations
-				if($result['status'] == 'blocked') {$readable_status = __('blocked', 'wp-blocked');}
-				else if($result['status'] == 'ok') {$readable_status = __('ok', 'wp-blocked');}
-				else if($result['status'] == 'error') {$readable_status = __('error', 'wp-blocked');}
-				else if($result['status'] == 'dns-error') {$readable_status = __('DNS error', 'wp-blocked');}
-				else if($result['status'] == 'timeout') {$readable_status = __('timeout', 'wp-blocked');}
-				else if($result['status'] == 'unknown') {$readable_status = __('unknown', 'wp-blocked');}
-
-				// create css classes for rows
-				$css_class = strtolower($result['status']);
-				if($result['first_blocked_timestamp']) $css_class .= " prior-block";
-
-				// if there is no first_blocked_ts this has never been blocked & we need to assign the current ts to last_blocked_ts
-				$first_blocked_timestamp = $result['first_blocked_timestamp'] ?:  __('No record of prior block', 'wp-blocked');
-				$last_blocked_timestamp = $result['last_blocked_timestamp'] ?: $result['status_timestamp'];
-				
-				// html output
-				$output .= '<tr class="'.$css_class.'">';
-				$output .= '<td>'.$result['network_name'].'</td>';
-				$output .= '<td>'.$readable_status.'</td>';
-				$output .= '<td>'.$last_blocked_timestamp.'</td>';
-				$output .= '<td>'.$first_blocked_timestamp.'</td>';
-				$output .= '</tr>';
-			}
-			$output .= '</table>';
-			$output .= '<p class="permlink">
-				<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
-				</p>';
+			$output .= format_results_table($status['results']);
 		}
+
+		// add permalinks and links for sharing the result on social media
+		$output .= '<p class="permlink">
+			<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
+			</p>';
 	} else {
 		$output .= '<p class="error">'.__("Could not retrieve results.", 'wp-blocked').'</p>';
 	}
 	return $output;
 }
 
+// create HTML output for status results, result table
+function format_results_table($results) {
+	$output .= '<table class="url-results">';
+	$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>';
+	foreach ($results as $result) {
+		// load translations
+		if($result['status'] == 'blocked') {$readable_status = __('blocked', 'wp-blocked');}
+		else if($result['status'] == 'ok') {$readable_status = __('ok', 'wp-blocked');}
+		else if($result['status'] == 'error') {$readable_status = __('error', 'wp-blocked');}
+		else if($result['status'] == 'dns-error') {$readable_status = __('DNS error', 'wp-blocked');}
+		else if($result['status'] == 'timeout') {$readable_status = __('timeout', 'wp-blocked');}
+		else if($result['status'] == 'unknown') {$readable_status = __('unknown', 'wp-blocked');}
+
+		// create css classes for rows
+		$css_class = strtolower($result['status']);
+		if($result['first_blocked_timestamp']) $css_class .= " prior-block";
+
+		// if there is no first_blocked_ts this has never been blocked & we need to assign the current ts to last_blocked_ts
+		$first_blocked_timestamp = $result['first_blocked_timestamp'] ?:  __('No record of prior block', 'wp-blocked');
+		$last_blocked_timestamp = $result['last_blocked_timestamp'] ?: $result['status_timestamp'];
+
+		// html output
+		$output .= '<tr class="'.$css_class.'">';
+		$output .= '<td>'.$result['network_name'].'</td>';
+		$output .= '<td>'.$readable_status.'</td>';
+		$output .= '<td>'.$last_blocked_timestamp.'</td>';
+		$output .= '<td>'.$first_blocked_timestamp.'</td>';
+		$output .= '</tr>';
+	}
+	$output .= '</table>';
+
+	return $output;
+}
+
+// add results to wp get_the_content function for the page ID specified in settings
 function display_results() {
 	global $post, $polylang;
 	if (function_exists('pll_current_language')) {
@@ -166,13 +128,30 @@ function display_results() {
 		// check if URL is SSL and if yes, then set $SSL to true
 		if(substr($URL, 0, 4) == "https") $SSL = true; 
 		else $SSL = false;
-		$output = $post->post_content.'<hr />'.fetch_results($URL, $SSL);
+		$output = $post->post_content.'<hr />'.fetch_results($URL, $SSL, false, $options);
 	} else {
 		$output = $post->post_content;
 	}
 	return $output;
 }
 add_filter( 'the_content', 'display_results', 4, 0);
+
+// fetch statistics based on Alexa ranking
+function fetch_stats($URL) {
+	require_once "lib/BlockedUrl.php";
+
+	// load $API_KEY, $API_EMAIL, $HOST, $URL_STATUS via WP options
+	$options = get_option('wp_blocked_option_name');
+
+	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['HOST'])) {
+		// throw error
+		echo __("Missing options.", 'wp-blocked');
+	} else {
+		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL=false );
+		$stats = $blocked->get_daily_stats(5)->daily_stats_response();
+		return $stats;
+	}
+}
 
 // create a shortcode which will insert a form [blocked_test_url]
 function wp_blocked_url_shortcode() {
@@ -198,26 +177,28 @@ function wp_blocked_statistics_shortcode() {
 		$curLocale = pll_current_language('locale');
 	}
 
-	if(isset($_GET['wp_blocked_url'])) {
-		$URL = sanitize_url($_GET['wp_blocked_url']);
-	} else {
-		$URL = sanitize_url($_POST['wp_blocked_url']);
-	}
+	if(isset($_GET['wp_blocked_url']) || isset($_POST['wp_blocked_url'])) {
+		if(isset($_GET['wp_blocked_url'])) {
+			$URL = sanitize_url($_GET['wp_blocked_url']);
+		} else if(isset($_POST['wp_blocked_url'])) {
+			$URL = sanitize_url($_POST['wp_blocked_url']);
+		}
 
-	$stats = fetch_stats();
-	if($stats['success'] == 1) {
-		$html_output = '<h2 class="widget-title">'.__('Statistics', 'wp-blocked').'</h2>';
-		foreach ($stats['stats'] as $date => $item) {
-			$percent = 100/100000*$item['blocked'];
-			$percent = number_format((float)$percent, 2, '.', '');
-			$html_output .= '<div class="blocked-item">';
-			$html_output .= '<span class="blocked_sites_percent">'.$percent.'%</span>';
-			$html_output .= '<span class="date">'.$date.'</span>';
-			$html_output .= '<span class="blocked_sites">'.$item['blocked'].' <i>'.__('blocked sites', 'wp-blocked').'</i></span>';
-			$html_output .= '</div>';
+		$stats = fetch_stats($URL);
+		if($stats && $stats['success'] == 1) {
+			$html_output = '<h2 class="widget-title">'.__('Statistics', 'wp-blocked').'</h2>';
+			foreach ($stats['stats'] as $date => $item) {
+				$percent = 100/100000*$item['blocked'];
+				$percent = number_format((float)$percent, 2, '.', '');
+				$html_output .= '<div class="blocked-item">';
+				$html_output .= '<span class="blocked_sites_percent">'.$percent.'%</span>';
+				$html_output .= '<span class="date">'.$date.'</span>';
+				$html_output .= '<span class="blocked_sites">'.$item['blocked'].' <i>'.__('blocked sites', 'wp-blocked').'</i></span>';
+				$html_output .= '</div>';
+			}
+			return $html_output;
 		}
 	}
-	echo $html_output;
 }
 add_shortcode( 'blocked_display_stats', 'wp_blocked_statistics_shortcode' );
 
