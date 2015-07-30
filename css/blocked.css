@@ -1,3 +1,7 @@
+/*
+ * result loader 
+ */
+
 .wp-blocked-results {
        position: relative;
 }
@@ -13,6 +17,29 @@
        text-align: center;
 }
 
+/*
+ * result table styles
+ */
+
+.url-results tr.ok {
+	background: lightgreen;	
+}
+
+.url-results tr.prior-block {
+	background: lightyellow;	
+}
+
+.url-results tr.blocked {
+	background: lightpink;	
+}
+
+.url-results tr.dns-error, .url-results tr.error {
+	background: crimson;	
+}
+
+/*
+ * result permalinks 
+ */
 
 .permlink a {
 	display: inline-block;
@@ -25,6 +52,10 @@
 	border: none;
 	margin: 0;
 }
+
+/*
+ * statistics 
+ */
 
 .blocked-item {
 	margin-bottom: 2em;
