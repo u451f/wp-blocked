@@ -61,33 +61,33 @@ function fetch_results($URL, $SSL=false, $fetch_stats=false) {
 function format_results($URL, $SSL=false, $fetch_stats=false) {
     $status = fetch_results($URL, $SSL, false);
 	if($status['success'] == 1) {
-        $output .= '<div id="blocked-results">';
-		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>';
-		$output .= '<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>';
+        $output .= '<div id="blocked-results">'."\n";
+		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
+		$output .= '<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>'."\n";
 
 		// create table
-        $output .= '<div class="blocked-results-table-wrapper">';
+        $output .= '<div class="blocked-results-table-wrapper">'."\n";
 		if(count($status['results']) > 0) {
 			$output .= format_results_table($status['results']);
 		}
-        $output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div>';
-        $output .= '</div>';
+        $output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div>'."\n";
+        $output .= '</div>'."\n";
 
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
 			<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
-			</p>';
+			</p>'."\n";
         $output .= "</div>";
 	} else {
-		$output .= '<p class="error">'.__("Could not retrieve results.", 'wp-blocked').'</p>';
+		$output .= '<p class="error">'.__("Could not retrieve results.", 'wp-blocked').'</p>'."\n";
 	}
 	return $output;
 }
 
 // create HTML output for status results, result table
 function format_results_table($results) {
-	$output .= '<table class="url-results" id="table-results">';
-	$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>';
+	$output .= '<table class="url-results" id="table-results">'."\n";
+	$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>'."\n";
 	foreach ($results as $result) {
 		// load translations
 		if($result['status'] == 'blocked') {$readable_status = __('blocked', 'wp-blocked');}
@@ -106,14 +106,14 @@ function format_results_table($results) {
 		$last_blocked_timestamp = $result['last_blocked_timestamp'] ?: $result['status_timestamp'];
 
 		// html output
-		$output .= '<tr class="'.$css_class.'">';
-		$output .= '<td>'.$result['network_name'].'</td>';
-		$output .= '<td>'.$readable_status.'</td>';
-		$output .= '<td>'.$last_blocked_timestamp.'</td>';
-		$output .= '<td>'.$first_blocked_timestamp.'</td>';
+		$output .= '<tr class="'.$css_class.'">'."\n";
+		$output .= '<td>'.$result['network_name'].'</td>'."\n";
+		$output .= '<td>'.$readable_status.'</td>'."\n";
+		$output .= '<td>'.$last_blocked_timestamp.'</td>'."\n";
+		$output .= '<td>'.$first_blocked_timestamp.'</td>'."\n";
 		$output .= '</tr>';
 	}
-	$output .= '</table>';
+	$output .= '</table>'."\n";
 
 	return $output;
 }
