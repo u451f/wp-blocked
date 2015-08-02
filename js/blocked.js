@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 
   setInterval(function(){
     if(!resultRows || resultRows < 2) {
-        if(tries < 5) {
+        if(tries < 10) {
             jQuery.ajax({
                 beforeSend: function() {
                     jQuery('#blocked-results-loader').fadeIn('fast');
@@ -36,9 +36,11 @@ jQuery(document).ready(function() {
                     jQuery('#blocked-results-loader').fadeOut('slow');
                 }
             });
-        tries++;
-        console.log("Trying to load more results: " + tries);
-        }
+			tries++;
+			console.log("Trying to load more results: " + tries);
+        } else {
+			console.log("Can't load more results.");
+		}
     }
   }, 4000);
 });
