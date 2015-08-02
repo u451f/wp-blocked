@@ -17,8 +17,8 @@ jQuery(document).ready(function() {
   var resultRows = jQuery('.url-results tbody').find('tr').length;
 
   setInterval(function(){
-    if(!resultRows || resultRows < 1) {
-        if(tries < 3) {
+    if(!resultRows || resultRows < 2) {
+        if(tries < 5) {
             jQuery.ajax({
                 beforeSend: function() {
                     jQuery('#blocked-results-loader').fadeIn('fast');
