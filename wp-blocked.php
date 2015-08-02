@@ -66,9 +66,12 @@ function format_results($URL, $SSL=false, $fetch_stats=false) {
 		$output .= '<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>';
 
 		// create table
+        $output .= '<div class="blocked-results-table-wrapper">';
 		if(count($status['results']) > 0) {
 			$output .= format_results_table($status['results']);
 		}
+        $output .= '<div id="blocked-results-loader"><!-- --></div>';
+        $output .= '</div>';
 
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
@@ -119,12 +122,15 @@ function format_results_table($results) {
 function reload_blocked_results() {
     // verify that ssl is either true or false
     if(isset($_POST['url'])) $URL = $_POST['url'];
-    else if(isset($_GETT['url'])) $URL = $_GET['url'];
-// fixme test debug
-    else $URL = "http://gmail.com";
-    echo format_results($URL, false, false);
+    else if(isset($_GET['url'])) $URL = $_GET['url'];
+    // fixme do not hardocde SSL value
+    $SSL = false;
+    $status = fetch_results($URL, $SSL, false);
+	if(count($status['results']) > 0) {
+        echo "<!-- reloaded URL: ". $status['url'] ." -->";
+        echo format_results_table($status['results']);
+    }
     wp_die();
-    //return format_results($URL, false, false);
 }
 add_action("wp_ajax_reload_blocked_results", "reload_blocked_results");
 add_action("wp_ajax_nopriv_reload_blocked_results", "reload_blocked_results");
@@ -183,7 +189,7 @@ function wp_blocked_url_shortcode() {
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
 
 	$form = '<form class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate autocomplete="on">';
-	$form .= '<input placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" name="wp_blocked_url" required onfocusout="checkURL(this)" /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
+	$form .= '<input placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" id="wp_blocked_url" name="wp_blocked_url" required onfocusout="checkURL(this)" /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
