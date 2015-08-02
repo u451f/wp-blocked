@@ -70,7 +70,7 @@ function format_results($URL, $SSL=false, $fetch_stats=false) {
 		if(count($status['results']) > 0) {
 			$output .= format_results_table($status['results']);
 		}
-        $output .= '<div id="blocked-results-loader"><!-- --></div>';
+        $output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div>';
         $output .= '</div>';
 
 		// add permalinks and links for sharing the result on social media
