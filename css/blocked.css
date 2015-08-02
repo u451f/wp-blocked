@@ -4,13 +4,15 @@
 
 .blocked-results-table-wrapper {
     position: relative;
+	min-height: 50px;
 }
 
 #blocked-results-loader {
     display: none;
     width: 100%;
     height: 100%;
-    background: #fff url("img/ajax-loader.gif") center center no-repeat;
+    background: #fafafa url("img/ajax-loader.gif") center center no-repeat;
+	color: dodgerblue;
     position: absolute;
     top: 0;
     left: 0;
@@ -58,6 +60,27 @@
  * statistics
  */
 
+@-webkit-keyframes statsanimation {
+      0% { background: gold; transform: rotate(360deg); }
+      25% { background: white; transform: rotate(180deg);}
+      50% { background: gold; transform: rotate(0deg);}
+}
+@-moz-keyframes statsanimation {
+      0% { background: gold; transform: rotate(360deg); }
+      25% { background: white; transform: rotate(180deg);}
+      50% { background: gold; transform: rotate(0deg);}
+}
+@-o-keyframes statsanimation {
+      0% { background: gold; transform: rotate(360deg); }
+      25% { background: white; transform: rotate(180deg);}
+      50% { background: gold; transform: rotate(0deg);}
+}
+@keyframes statsanimation {
+      0% { background: gold; transform: rotate(360deg); }
+      25% { background: white; transform: rotate(180deg);}
+      50% { background: gold; transform: rotate(0deg);}
+}
+
 .blocked-item {
 	margin-bottom: 2em;
 	overflow: hidden;
@@ -82,22 +105,22 @@
 }
 
 .blocked-item .blocked_sites_percent {
+    -webkit-animation: statsanimation ease-in-out 3s;
+    -moz-animation:    statsanimation ease-in-out 3s;
+    -o-animation:      statsanimation ease-in-out 3s;
+    animation:         statsanimation ease-in-out 3s;
 	float: left;
 	margin-right: 1em;
 	display: block;
+    font-size: 1.1em;
 	width: 100px;
 	height: 65px;
 	padding-top: 35px;
+	padding-bottom: 65px;
+	box-sizing: border-box;
 	color: #de2d3c;
+    background: gold;
 	font-size: 1.5em;
 	text-align: center;
 	border-radius: 50px;
-	border: 2px dashed #eee;
-	-moz-transform: rotate(360deg);
-	-ms-transform: rotate(360deg);
-	-o-transform: rotate(360deg);
-	-webkit-transform: rotate(360deg);
-	-moz-transition-duration: 0.4s;
-	-webkit-transition-duration: 0.4s;
-	transition-duration: 0.4s;
 }
