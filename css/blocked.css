@@ -1,20 +1,21 @@
 /*
- * result loader 
+ * result loader
  */
 
-.wp-blocked-results {
-       position: relative;
+.blocked-results-table-wrapper {
+    position: relative;
 }
 
-.wp-blocked-results .loading {
-       width: 100%;
-       height: 100%;
-       background-color: #fff;
-       position: absolute;
-       top: 0;
-       left: 0;
-       z-index: 2;
-       text-align: center;
+#blocked-results-loader {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    text-align: center;
 }
 
 /*
@@ -22,23 +23,23 @@
  */
 
 .url-results tr.ok {
-	background: lightgreen;	
+	background: lightgreen;
 }
 
 .url-results tr.prior-block {
-	background: lightyellow;	
+	background: lightyellow;
 }
 
 .url-results tr.blocked {
-	background: lightpink;	
+	background: lightpink;
 }
 
 .url-results tr.dns-error, .url-results tr.error {
-	background: crimson;	
+	background: crimson;
 }
 
 /*
- * result permalinks 
+ * result permalinks
  */
 
 .permlink a {
@@ -54,7 +55,7 @@
 }
 
 /*
- * statistics 
+ * statistics
  */
 
 .blocked-item {
