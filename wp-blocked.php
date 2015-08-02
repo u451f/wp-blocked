@@ -36,14 +36,17 @@ function wp_blocked_init() {
 add_action('plugins_loaded', 'wp_blocked_init');
 
 // fetch results from server
-function fetch_results($URL, $SSL=false, $fetch_stats=false) {
+function fetch_results($URL, $fetch_stats=false) {
 	require_once "lib/BlockedUrl.php";
 	$options = get_option('wp_blocked_option_name');
 
+    // check for required options.
 	if(empty($options['API_KEY']) OR empty($options['API_EMAIL']) OR empty($options['HOST'])) {
 		// throw error
 		echo __("Missing options.", 'wp-blocked');
 	} else {
+        // translate SSL option
+        if (!$options['SSL'] || $options['SSL'] == "0") $SSL = False; else $SSL = True;
         // API change in BlockedURL 0.2.x => 0.3.0!
 		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL ); // false = disable SSL peer verification
 
@@ -58,8 +61,8 @@ function fetch_results($URL, $SSL=false, $fetch_stats=false) {
 }
 
 // create HTML output for status results
-function format_results($URL, $SSL=false, $fetch_stats=false) {
-    $status = fetch_results($URL, $SSL, false);
+function format_results($URL, $fetch_stats=false) {
+    $status = fetch_results($URL, false);
 	if($status['success'] == 1) {
         $output .= '<div id="blocked-results">'."\n";
 		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
@@ -121,12 +124,9 @@ function format_results_table($results) {
 
 // this will only be called on the AJAX call
 function reload_blocked_results() {
-    // verify that ssl is either true or false
-    if(isset($_POST['url'])) $URL = $_POST['url'];
-    else if(isset($_GET['url'])) $URL = $_GET['url'];
-    // fixme do not hardocde SSL value
-    $SSL = false;
-    $status = fetch_results($URL, $SSL, false);
+    if(isset($_POST['url'])) $URL = esc_url($_POST['url']);
+    else if(isset($_GET['url'])) $URL = esc_url($_GET['url']);
+    $status = fetch_results($URL, false);
 	if(count($status['results']) > 0) {
         echo "<!-- reloaded URL: ". $status['url'] ." -->";
         echo format_results_table($status['results']);
@@ -146,14 +146,11 @@ function display_results() {
 
 	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($options["resultspage_$curLocale"])) {
 		if(isset($_GET['wp_blocked_url'])) {
-			$URL = sanitize_url($_GET['wp_blocked_url']);
+			$URL = esc_url($_GET['wp_blocked_url']);
 		} else {
-			$URL = sanitize_url($_POST['wp_blocked_url']);
+			$URL = esc_url($_POST['wp_blocked_url']);
 		}
-		// check if URL is SSL and if yes, then set $SSL to true
-		//if(substr($URL, 0, 4) == "https") $SSL = true;
-		//else $SSL = false;
-		$output = $post->post_content.'<hr />'.format_results($URL, $SSL, false);
+		$output = $post->post_content.'<hr />'.format_results($URL, false);
 	} else {
 		$output = $post->post_content;
 	}
@@ -334,6 +331,13 @@ class wpBlockedSettingsPage {
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
+        add_settings_field(
+            'SSL',
+            'Use SSL to talk to the Middleware? Set this to no if Middleware server uses a self-signed certificate',
+            array( $this, 'ssl_callback' ),
+            'wp-blocked-settings',
+            'wp_blocked_section_general'
+        );
 
 	$languages = get_languages();
 	if($languages) {
@@ -365,12 +369,13 @@ class wpBlockedSettingsPage {
      */
     public function sanitize( $input ) {
 
-        if( !empty( $input['API_KEY'] ) )
-            $input['API_KEY'] = sanitize_text_field( $input['API_KEY'] );
-        if( !empty( $input['API_EMAIL'] ) )
-            $input['API_EMAIL'] = sanitize_email( $input['API_EMAIL'] );
-        if( !empty( $input['HOST'] ) )
-            $input['HOST'] = sanitize_text_field( $input['HOST'] );
+    if( !empty( $input['API_KEY'] ) )
+        $input['API_KEY'] = sanitize_text_field( $input['API_KEY'] );
+    if( !empty( $input['API_EMAIL'] ) )
+        $input['API_EMAIL'] = sanitize_email( $input['API_EMAIL'] );
+    if( !empty( $input['HOST'] ) )
+        $input['HOST'] = sanitize_text_field( $input['HOST'] );
+
 	$languages = get_languages();
 	if($languages) {
 		foreach($languages as $lang) {
@@ -390,6 +395,7 @@ class wpBlockedSettingsPage {
     /**
      * Print the Section text
      */
+
     public function print_section_info() {
         print _e('Please fill in the corresponding fields.');
     }
@@ -419,12 +425,17 @@ class wpBlockedSettingsPage {
         );
     }
 
+    public function ssl_callback() {
+	    $options = get_option('wp_blocked_option_name');
+        echo '<input name="wp_blocked_option_name[SSL]" id="SSL" type="checkbox" value="1" ' . checked( 1, $options['SSL'], false ) . ' /> SSL';
+    }
+
     public function resultspage_status_callback($args) {
 	$locale = $args['locale'];
 	printf(
 	    '<input type="number" id="resultspage_'.$locale.'" name="wp_blocked_option_name[resultspage_'.$locale.']" value="%s" class="regular-text ltr" required />',
 	    esc_attr( $this->options["resultspage_$locale"])
-	);
+	    );
     }
 }
 

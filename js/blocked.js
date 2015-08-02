@@ -12,13 +12,12 @@ jQuery(document).ready(function() {
   // then check again. if on 3rd try there is nothing, we give up and display an error message.
   var tries = 0;
   var blockedurl = jQuery('#wp_blocked_url').val();
-  var blockedssl = false; // fixme : get correct ssl value
 
   // check if table has more than 0 results
   var resultRows = jQuery('.url-results tbody').find('tr').length;
 
   setInterval(function(){
-    if(!resultRows || resultRows < 4) { // fixme => here we will put if resultRows == 0
+    if(!resultRows || resultRows < 1) {
         if(tries < 3) {
             jQuery.ajax({
                 beforeSend: function() {
@@ -26,7 +25,7 @@ jQuery(document).ready(function() {
                 },
                 url : myAjax.ajaxurl,
                 method: "POST",
-                data: { action: "reload_blocked_results", url: blockedurl, ssl: blockedssl },
+                data: { action: "reload_blocked_results", url: blockedurl },
                 dataType: "text",
                 cache: false,
                 error: function (xhr, ajaxOptions, thrownError) {
