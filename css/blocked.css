@@ -4,20 +4,20 @@
 
 .blocked-results-table-wrapper {
     position: relative;
+	min-height: 50px;
 }
 
 #blocked-results-loader {
     display: none;
     width: 100%;
     height: 100%;
-    background: #fff url("img/ajax-loader.gif") center center no-repeat;
+    background: #fafafa url("img/ajax-loader.gif") center center no-repeat;
 	color: dodgerblue;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 2;
     text-align: center;
-	min-height: 25px;
 }
 
 /*
@@ -60,6 +60,27 @@
  * statistics
  */
 
+@-webkit-keyframes statsanimation {
+      0% { background: gold;}
+      50% { background: #aaa;}
+      100% { background: white;}
+}
+@-moz-keyframes statsanimation {
+      0% { background: gold;}
+      50% { background: white;}
+      100% { background: gold;}
+}
+@-o-keyframes statsanimation {
+      0% { background: gold;}
+      50% { background: white;}
+      100% { background: gold;}
+}
+@keyframes statsanimation {
+      0% { background: gold;}
+      50% { background: white;}
+      100% { background: gold;}
+}
+
 .blocked-item {
 	margin-bottom: 2em;
 	overflow: hidden;
@@ -84,12 +105,18 @@
 }
 
 .blocked-item .blocked_sites_percent {
+    -webkit-animation: statsanimation ease-in-out 15s -2s;
+    -moz-animation:    statsanimation ease-in-out 13s -2s;
+    -o-animation:      statsanimation ease-in-out 15s -2s;
+    animation:         statsanimation ease-in-out 15s -2s;
 	float: left;
 	margin-right: 1em;
 	display: block;
 	width: 100px;
 	height: 65px;
 	padding-top: 35px;
+	padding-bottom: 65px;
+	box-sizing: border-box;
 	color: #de2d3c;
 	font-size: 1.5em;
 	text-align: center;
