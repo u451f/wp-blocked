@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 
   setInterval(function(){
     if(!resultRows || resultRows < 1) {
-        if(tries < 3) {
+        if(tries < 5) {
             jQuery.ajax({
                 beforeSend: function() {
                     jQuery('#blocked-results-loader').fadeIn('fast');
