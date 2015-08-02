@@ -67,11 +67,12 @@ function format_results($URL, $SSL=false, $fetch_stats=false) {
 
 		// create table
         $output .= '<div class="blocked-results-table-wrapper">'."\n";
+        $output .= '<div id="table-results">'."\n";
 		if(count($status['results']) > 0) {
 			$output .= format_results_table($status['results']);
 		}
-        $output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div>'."\n";
         $output .= '</div>'."\n";
+        $output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
 
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
@@ -86,7 +87,7 @@ function format_results($URL, $SSL=false, $fetch_stats=false) {
 
 // create HTML output for status results, result table
 function format_results_table($results) {
-	$output .= '<table class="url-results" id="table-results">'."\n";
+	$output .= '<table class="url-results">'."\n";
 	$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>'."\n";
 	foreach ($results as $result) {
 		// load translations

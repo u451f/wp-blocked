@@ -38,7 +38,7 @@ jQuery(document).ready(function() {
                 }
             });
         tries++;
-        //console.log("Trying to load more results: " + tries);
+        console.log("Trying to load more results: " + tries);
         }
     }
   }, 4000);
