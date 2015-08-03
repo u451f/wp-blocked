@@ -66,7 +66,7 @@ function format_results($URL, $fetch_stats=false) {
 	if($status['success'] == 1) {
 		$output .= '<div id="blocked-results">'."\n";
 		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
-		$output .= '<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>'."\n";
+		$output .= '<!--<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>-->'."\n";
 
 		// create table
 		$output .= '<div class="blocked-results-table-wrapper">'."\n";
