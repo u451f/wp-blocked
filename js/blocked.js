@@ -17,6 +17,11 @@ jQuery(document).ready(function() {
   var resultRows = jQuery('.url-results tbody').find('tr').length;
 
   setInterval(function(){
+	// show loader directly if there are no results at all.
+    if(!resultRows || resultRows < 1) {
+        jQuery('#blocked-results-loader').fadeIn('fast');
+	}
+	// reload 10 times or until we have at least  2 results
     if(!resultRows || resultRows < 2) {
         if(tries < 10) {
             jQuery.ajax({
