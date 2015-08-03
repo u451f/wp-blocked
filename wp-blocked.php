@@ -64,18 +64,18 @@ function fetch_results($URL, $fetch_stats=false) {
 function format_results($URL, $fetch_stats=false) {
     $status = fetch_results($URL, false);
 	if($status['success'] == 1) {
-        $output .= '<div id="blocked-results">'."\n";
+		$output .= '<div id="blocked-results">'."\n";
 		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
 		$output .= '<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>'."\n";
 
 		// create table
-        $output .= '<div class="blocked-results-table-wrapper">'."\n";
-        $output .= '<div id="table-results">'."\n";
+		$output .= '<div class="blocked-results-table-wrapper">'."\n";
+		$output .= '<div id="table-results">'."\n";
 		if(count($status['results']) > 0) {
 			$output .= format_results_table($status['results']);
 		}
-        $output .= '</div>'."\n";
-        $output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
+		$output .= '</div>'."\n";
+		$output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
 
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
@@ -170,7 +170,7 @@ function fetch_stats($URL) {
 		echo __("Missing options.", 'wp-blocked');
 	} else {
 		$blocked = new BlockedUrl( $options['API_KEY'], $options['API_EMAIL'], $URL, $options['HOST'], $SSL=false );
-		$stats = $blocked->get_daily_stats(5)->daily_stats_response();
+		$stats = $blocked->get_daily_stats(4)->daily_stats_response();
 		return $stats;
 	}
 }
