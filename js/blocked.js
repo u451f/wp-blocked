@@ -16,12 +16,13 @@ jQuery(document).ready(function() {
   // check if table has more than 0 results
   var resultRows = jQuery('.url-results tbody').find('tr').length;
 
-  setInterval(function(){
-	// show loader directly if there are no results at all.
-    if(!resultRows || resultRows < 1) {
-        jQuery('#blocked-results-loader').fadeIn('fast');
-	}
-	// reload 10 times or until we have at least  2 results
+  // show loader directly if there are no results at all.
+  if(!resultRows || resultRows < 1 && tries < 10) {
+      jQuery('#blocked-results-loader').fadeIn('fast');
+  }
+
+  var reload = setInterval(function(){
+    // reload 10 times or until we have at least  2 results
     if(!resultRows || resultRows < 2) {
         if(tries < 10) {
             jQuery.ajax({
@@ -38,14 +39,18 @@ jQuery(document).ready(function() {
                 },
                 success: function(response) {
                     jQuery('#table-results').html(response);
-                    jQuery('#blocked-results-loader').fadeOut('slow');
+    		    if(resultRows > 0) {
+                        jQuery('#blocked-results-loader').fadeOut('slow');
+		    }
                 }
             });
-			tries++;
-			console.log("Trying to load more results: " + tries);
+            tries++;
+	    console.log("Trying to load more results: " + tries);
         } else {
-			console.log("Can't load more results.");
-		}
+            jQuery('#blocked-results-loader').html("Can't load more results.").css('background-image', 'none');
+	    console.log("Can't load more results.");
+            clearInterval(reload);
+	}
     }
   }, 4000);
 });
