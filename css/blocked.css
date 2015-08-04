@@ -36,6 +36,10 @@
 	background: lightpink;
 }
 
+.url-results tr.unknown {
+	background: #fafafa;
+}
+
 .url-results tr.dns-error, .url-results tr.error {
 	background: crimson;
 }
