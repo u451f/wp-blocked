@@ -62,7 +62,7 @@ function fetch_results($URL, $fetch_stats=false) {
 
 // create HTML output for status results
 function format_results($URL, $fetch_stats=false) {
-    $status = fetch_results($URL, false);
+    $status = fetch_results($URL, $fetch_stats);
 	if($status['success'] == 1) {
 		$output .= '<div id="blocked-results">'."\n";
 		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
@@ -124,10 +124,10 @@ function format_results_table($results) {
 
 // this will only be called on the AJAX call
 function reload_blocked_results() {
-    if(isset($_POST['url'])) $URL = esc_url($_POST['url']);
-    else if(isset($_GET['url'])) $URL = esc_url($_GET['url']);
+    if(isset($_POST['wp_blocked_url'])) $URL = esc_url($_POST['wp_blocked_url']);
+    else if(isset($_GET['wp_blocked_url'])) $URL = esc_url($_GET['wp_blocked_url']);
     $status = fetch_results($URL, false);
-	if(count($status['results']) > 0) {
+    if(count($status['results']) > 0) {
         echo "<!-- reloaded URL: ". $status['url'] ." -->";
         echo format_results_table($status['results']);
     }
@@ -143,14 +143,13 @@ function display_results() {
 		$curLocale = pll_current_language('locale');
 	}
 	$options = get_option('wp_blocked_option_name');
-
 	if(isset($_POST['wp_blocked_url']) OR isset($_GET['wp_blocked_url']) && is_page($options["resultspage_$curLocale"])) {
 		if(isset($_GET['wp_blocked_url'])) {
 			$URL = esc_url($_GET['wp_blocked_url']);
 		} else {
 			$URL = esc_url($_POST['wp_blocked_url']);
 		}
-		$output = $post->post_content.'<hr />'.format_results($URL, false);
+		$output = $post->post_content.'<hr />'.format_results($URL);
 	} else {
 		$output = $post->post_content;
 	}
