@@ -65,7 +65,7 @@ class BlockedUrl {
     // this is a simple URL maker that takes the host from constructor
     // and creates https://<HOST>/<PATH_FOR_CALL_TYPE>
     //
-    // make_url_for( <submit|status|daily_stats>[, false ] )
+    // make_url_for( <submit|status|global|daily_stats>[, false ] )
     // 
     // set $https param to false to create http instead of https
     public function make_url_for( $api_call_type, $https = true ){
