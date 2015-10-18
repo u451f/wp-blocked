@@ -72,6 +72,7 @@ class BlockedUrl {
         $white_list = array(
             "submit"      => '/submit/url',
             "status"      => '/status/url',
+            "global"      => '/status/global/url',
             "daily_stats" => '/status/daily-stats'
         );
         $path = $white_list[ $api_call_type ];
@@ -151,6 +152,34 @@ class BlockedUrl {
         
         throw new Exception("Unhandled get_status error! Server returned: " . $json );
         
+    }
+ 
+    public function get_global_status() {
+
+        $response = CurlWrapper::curl_get(
+            $this->make_url_for('global'),
+            array(
+                "email"     => $this->api_email,
+                "url"       => $this->url,
+                "signature" => $this->make_signature( $this->url ),
+            ),
+            $this->curl_opts()
+        );
+
+        if ( $response["error"] ){
+            throw new Exception( "get_status failed to call to curl with: " . $response['error'] );
+        }
+        if( $response["status"] == 404 ) {
+            // try to push first, then retry getting status
+            return $this->push_request()->get_global_status();
+        }
+        if ( $response["status"] == 200 ){
+            $this->_status_response = json_decode( $response['body'], true );
+            return $this;
+        }
+
+        throw new Exception("Unhandled get_status error! Server returned: " . $json );
+
     }
 
     public function get_daily_stats( $days ){
