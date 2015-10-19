@@ -65,18 +65,27 @@ function format_results($URL, $fetch_stats=false) {
     $status = fetch_results($URL, $fetch_stats);
 	if($status['success'] == 1) {
 		$output .= '<div id="blocked-results">'."\n";
-		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
-		$output .= '<!--<h3 class="url-status">'.__("Status", 'wp-blocked').' '. $status['url-status'].'</h3>-->'."\n";
+
+		// if this is not a global request, add one level to our array
+		if(count($status['results'] == 1)) {
+			$status['results'][0] = $status['results'];
+		}
 
 		// create table
 		$output .= '<div class="blocked-results-table-wrapper">'."\n";
 		$output .= '<div id="table-results">'."\n";
-		if(count($status['results']) > 0) {
-			$output .= format_results_table($status['results']);
+
+		foreach ($status['results'] as $result) {
+			// fixme this should go outside of the div
+			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $result['url'].'</h2>'."\n";
+
+			if(count($result['results']) > 0) {
+				$output .= format_results_table($result['results']);
+			}
 		}
+
 		$output .= '</div>'."\n";
 		$output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
-
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
 			<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
@@ -90,6 +99,9 @@ function format_results($URL, $fetch_stats=false) {
 
 // create HTML output for status results, result table
 function format_results_table($results) {
+	if($results['country']) {
+		$output .= '<h3>'.$results['country'].'</h3>'."\n";
+	}
 	$output .= '<table class="url-results">'."\n";
 	$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>'."\n";
 	foreach ($results as $result) {
@@ -190,6 +202,24 @@ function wp_blocked_url_shortcode() {
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
+
+// create a shortcode which will insert a form [blocked_test_url_global]
+// using thsi shortcode is mutually exclusive with [blocked_test_url]
+function wp_blocked_url_global_shortcode() {
+	global $polylang;
+	if (function_exists('pll_current_language')) {
+		$curLocale = pll_current_language('locale');
+	}
+
+	$options = get_option('wp_blocked_option_name');
+	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
+	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
+
+	$form = '<form class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate autocomplete="on">';
+	$form .= '<input placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" id="wp_blocked_url" name="wp_blocked_url" required onfocusout="checkURL(this)" /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
+	return $form;
+}
+add_shortcode( 'blocked_test_url_global', 'wp_blocked_url_global_shortcode' );
 
 // implement a way to display statistics of blocked URLs
 function wp_blocked_statistics_shortcode() {
