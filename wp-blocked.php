@@ -68,25 +68,23 @@ function fetch_results($URL, $fetch_stats=false) {
 function format_results($URL, $fetch_stats=false) {
     $status = fetch_results($URL, $fetch_stats);
 	if($status['success'] == 1) {
-		
-		// if this is not a global request, add one level to our array
-		if(!$status['results'][0]) {
-		     foreach($status['results'] as $k => $v) {
-			 $status['results'][0][$k] = $v;
-			 unset ($status['results'][$k]);
-		     }
-		}
-
 		$output .= '<div id="blocked-results">'."\n";
 		// create table
 		$output .= '<div class="blocked-results-table-wrapper">'."\n";
 		$output .= '<div id="table-results">'."\n";
-		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['results'][0]['url'].'</h2>'."\n";
 
-		foreach ($status['results'] as $result) {
-			//if(count($result['results']) > 0) {
-			$output .= format_results_table($result['results'], $result['country']);
-			//}
+		// we might have a global request
+		if ($status['results'][0]['results']) {
+			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['results'][0]['url'].'</h2>'."\n";
+			foreach ($status['results'] as $country) {
+			    $output .= format_results_table($country['results'], $country['country']);
+			}
+		} else {
+			// or a simple request
+			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
+			if(count($status['results']) > 0) {
+			    $output .= format_results_table($status['results']);
+			}
 		}
 
 		$output .= '</div>'."\n";

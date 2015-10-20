@@ -1,3 +1,4 @@
+// verify if a string is a URL, if not add http:// protocol inf ront
 function checkURL(url) {
     var string = url.value;
     if (!~string.indexOf("http")){
@@ -13,6 +14,8 @@ jQuery(document).ready(function() {
 	  // if there are no results, we try to reload after n milliseconds.
 	  // then check again. if on 3rd try there is nothing, we give up and display an error message.
 	  var tries = 0;
+
+	  // retrieve URL from search input
 	  var blockedurl = jQuery('#wp_blocked_url').val();
 
 	  // check if table has more than 0 results
