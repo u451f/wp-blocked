@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wp-blocked\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-07-17 18:01+0100\n"
+"PO-Revision-Date: 2015-10-20 14:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,11 +13,11 @@ msgstr ""
 "X-Generator: Poedit 1.6.10\n"
 "Language: fr\n"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "No results"
 msgstr "Aucun résultat"
 
-#@ wp-blocked
+# @ wp-blocked
 msgid "URL format: http://example.com or https://secure.com"
 msgstr "Format d'URL : http://exemple.com ou https://securise.com"
 
