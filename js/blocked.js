@@ -17,9 +17,11 @@ jQuery(document).ready(function() {
 	  }
 
 	  var reload = setInterval(function(){
-	    // reload 10 times or until we have at least  2 results
+	    // reload 10 times or until we have at least 2 results
 	    if(!resultRows || resultRows < 2) {
 		if(tries < 10) {
+		    // on each try check table rows
+		    resultRows = jQuery('.url-results tbody').find('tr').length;
 		    jQuery.ajax({
 			beforeSend: function() {
 			    jQuery('#blocked-results-loader').fadeIn('fast');
@@ -46,7 +48,8 @@ jQuery(document).ready(function() {
 		    console.log("Can't load more results.");
 		    clearInterval(reload);
 		}
-	    }
-	  }, 4000);
+	    } else {
+            }
+	  }, 5000);
   }
 });
