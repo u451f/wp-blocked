@@ -13,6 +13,10 @@ msgstr ""
 "X-Generator: Poedit 1.6.10\n"
 "Language: fr\n"
 
+#@ wp-blocked
+msgid "No results"
+msgstr "Aucun résultat"
+
 # @ wp-blocked
 msgid "blocked"
 msgstr "bloqué"

@@ -17,6 +17,10 @@ msgid "blocked"
 msgstr ""
 
 #@ wp-blocked
+msgid "No results"
+msgstr ""
+
+#@ wp-blocked
 msgid "ok"
 msgstr ""
 
