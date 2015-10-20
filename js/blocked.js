@@ -10,7 +10,7 @@ function checkURL(url) {
 
 jQuery(document).ready(function() {
   // check if we are on the results page
-  if(jQuery('#blocked-results').length > 0) {
+  if(jQuery('#blocked-results').length > 0 && jQuery('#blocked-results div.error').length < 1) {
 	  // if there are no results, we try to reload after n milliseconds.
 	  // then check again. if on 3rd try there is nothing, we give up and display an error message.
 	  var tries = 0;
