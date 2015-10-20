@@ -91,7 +91,7 @@ function format_results($URL, $fetch_stats=false) {
 			if(count($status['results']) > 0) {
 			    $output .= format_results_table($status['results']);
 			}  else {
-			    $output .= '<div class="error">'.$status['results'].': '.__('No results', 'wp-blocked').'</div>';
+			    $output .= '<div class="error">'.__('No results', 'wp-blocked').'</div>';
 			}
 		}
 
