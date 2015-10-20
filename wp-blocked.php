@@ -73,26 +73,25 @@ function format_results($URL, $fetch_stats=false) {
 		// create table
 		$output .= '<div class="blocked-results-table-wrapper">'."\n";
 		$output .= '<div id="table-results">'."\n";
+		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $URL.'</h2>'."\n";
 
-		foreach ($status['results'] as $country) {
-			if($country['error']) {
-				$output .= '<div class="error">'.$country['country'].': '.$country['error'].'</div>';
-			} else if($country['success'] == 1 && $country['results']) {
-				if(count($country['results']) > 0) {
-					$status['url'] = $country['results']['url'];
-					$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
-					// we might have a global request
+		if($status['results'][0]['success'] || $status['results'][0]['error']) {
+			// global request
+			foreach ($status['results'] as $country) {
+				if($country['error']) {
+					$output .= '<div class="error">'.$country['country'].': '.$country['error'].'</div>';
+				} else if($country['success'] == 1 && count($country['results']) > 0) {
 					$output .= format_results_table($country['results'], $country['country']);
 				}  else {
 					$output .= '<div class="error">'.$country['country'].': '.__('No results', 'wp-blocked').'</div>';
 				}
-			} else {
-				if(count($country['results']) > 0) {
-			            $output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
-				    $output .= format_results_table($country);
-				}  else {
-					$output .= '<div class="error">'.$country['country'].': '.__('No results', 'wp-blocked').'</div>';
-				}
+			}
+		} else {
+			// simple request
+			if(count($status['results']) > 0) {
+			    $output .= format_results_table($status['results']);
+			}  else {
+			    $output .= '<div class="error">'.$status['results'].': '.__('No results', 'wp-blocked').'</div>';
 			}
 		}
 
