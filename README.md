@@ -4,6 +4,8 @@ A wordpress plugin to check for blocked URLs querying the Blocked Middleware by 
 Depends on php-lib-blocked-url (included) and php5-curl.
 We also use the polylang Wordpress plugin for l10n, but it is not required.
 
+Test the plugin on [wp.censorship.exposed](https://wp.censorship.exposed/en/test-if-this-url-is-censored/?wp_blocked_url=http://torproject.org)
+
 # BlockedUrl
 
 A simple library that lets you submit URLs to it and fetch a result later. Implemented in Perl, PHP and as Wordpress plugin.
