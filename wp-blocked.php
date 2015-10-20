@@ -52,10 +52,14 @@ function fetch_results($URL, $fetch_stats=false) {
 
 		// push your URL to network, and fetch response
 		$pushed = $blocked->push_request()->push_response();
-
-		// retrieve URL status
-		$status = $blocked->get_status()->status_response();
-
+	
+        	if (!$options['GLOBAL'] || $options['GLOBAL'] == "0") {
+			// retrieve URL status form one country
+			$status = $blocked->get_status()->status_response();
+		} else  {
+			// retrieve results from all installations	
+			$status = $blocked->get_global_status()->status_response();
+		}
 		return $status;
 	}
 }
@@ -67,8 +71,11 @@ function format_results($URL, $fetch_stats=false) {
 		$output .= '<div id="blocked-results">'."\n";
 
 		// if this is not a global request, add one level to our array
-		if(count($status['results'] == 1)) {
-			$status['results'][0] = $status['results'];
+		if(!$status['results'][0]) {
+		     foreach($status['results'] as $k => $v) {
+			 $status['results'][0][$k] = $v;
+			 unset ($status['results'][$k]);
+		     }
 		}
 
 		// create table
@@ -79,13 +86,13 @@ function format_results($URL, $fetch_stats=false) {
 			// fixme this should go outside of the div
 			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $result['url'].'</h2>'."\n";
 
-			if(count($result['results']) > 0) {
-				$output .= format_results_table($result['results']);
-			}
+			//if(count($result['results']) > 0) {
+			$output .= format_results_table($result['results']);
+			//}
 		}
 
 		$output .= '</div>'."\n";
-		$output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
+	//	$output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
 			<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
@@ -99,11 +106,10 @@ function format_results($URL, $fetch_stats=false) {
 
 // create HTML output for status results, result table
 function format_results_table($results) {
-	if($results['country']) {
-		$output .= '<h3>'.$results['country'].'</h3>'."\n";
-	}
 	$output .= '<table class="url-results">'."\n";
-	$output .= '<thead><tr><th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>'."\n";
+	$output .= '<thead><tr>'."\n";
+	if($global === true) $output .= '<th>'.$results['country'].'</th>'."\n";
+	$output .= '<th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>'."\n";
 	foreach ($results as $result) {
 		// load translations
 		if($result['status'] == 'blocked') {$readable_status = __('blocked', 'wp-blocked');}
@@ -123,6 +129,7 @@ function format_results_table($results) {
 
 		// html output
 		$output .= '<tr class="'.$css_class.'">'."\n";
+		if($global === true) $output .= '<td>'.$result['country'].'</td>'."\n";
 		$output .= '<td>'.$result['network_name'].'</td>'."\n";
 		$output .= '<td>'.$readable_status.'</td>'."\n";
 		$output .= '<td>'.$last_blocked_timestamp.'</td>'."\n";
@@ -141,7 +148,7 @@ function reload_blocked_results() {
     $status = fetch_results($URL, false);
     if(count($status['results']) > 0) {
         echo "<!-- reloaded URL: ". $status['url'] ." -->";
-        echo format_results_table($status['results']);
+        echo format_results_table($status['results'], true);
     }
     wp_die();
 }
@@ -202,24 +209,6 @@ function wp_blocked_url_shortcode() {
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
-
-// create a shortcode which will insert a form [blocked_test_url_global]
-// using thsi shortcode is mutually exclusive with [blocked_test_url]
-function wp_blocked_url_global_shortcode() {
-	global $polylang;
-	if (function_exists('pll_current_language')) {
-		$curLocale = pll_current_language('locale');
-	}
-
-	$options = get_option('wp_blocked_option_name');
-	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
-	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
-
-	$form = '<form class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate autocomplete="on">';
-	$form .= '<input placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" id="wp_blocked_url" name="wp_blocked_url" required onfocusout="checkURL(this)" /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
-	return $form;
-}
-add_shortcode( 'blocked_test_url_global', 'wp_blocked_url_global_shortcode' );
 
 // implement a way to display statistics of blocked URLs
 function wp_blocked_statistics_shortcode() {
@@ -367,6 +356,13 @@ class wpBlockedSettingsPage {
             'wp-blocked-settings',
             'wp_blocked_section_general'
         );
+        add_settings_field(
+            'GLOBAL',
+            'Retrieve results globally, from all installations',
+            array( $this, 'global_callback' ),
+            'wp-blocked-settings',
+            'wp_blocked_section_general'
+        );
 
 	$languages = get_languages();
 	if($languages) {
@@ -457,6 +453,11 @@ class wpBlockedSettingsPage {
     public function ssl_callback() {
 	    $options = get_option('wp_blocked_option_name');
         echo '<input name="wp_blocked_option_name[SSL]" id="SSL" type="checkbox" value="1" ' . checked( 1, $options['SSL'], false ) . ' /> SSL';
+    }
+
+    public function global_callback() {
+	    $options = get_option('wp_blocked_option_name');
+        echo '<input name="wp_blocked_option_name[GLOBAL]" id="GLOBAL" type="checkbox" value="1" ' . checked( 1, $options['GLOBAL'], false ) . ' /> global';
     }
 
     public function resultspage_status_callback($args) {
