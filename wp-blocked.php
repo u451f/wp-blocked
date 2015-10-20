@@ -100,7 +100,7 @@ function format_results($URL, $fetch_stats=false) {
 		$output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
-			<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
+			<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$URL.'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $URL .'+'.get_permalink($post->ID).'?wp_blocked_url='.$URL.'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $URL .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$URL.'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
 			</p>'."\n";
         $output .= "</div>";
 	} else {
