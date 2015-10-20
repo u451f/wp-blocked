@@ -68,8 +68,7 @@ function fetch_results($URL, $fetch_stats=false) {
 function format_results($URL, $fetch_stats=false) {
     $status = fetch_results($URL, $fetch_stats);
 	if($status['success'] == 1) {
-		$output .= '<div id="blocked-results">'."\n";
-
+		
 		// if this is not a global request, add one level to our array
 		if(!$status['results'][0]) {
 		     foreach($status['results'] as $k => $v) {
@@ -78,21 +77,20 @@ function format_results($URL, $fetch_stats=false) {
 		     }
 		}
 
+		$output .= '<div id="blocked-results">'."\n";
 		// create table
 		$output .= '<div class="blocked-results-table-wrapper">'."\n";
 		$output .= '<div id="table-results">'."\n";
+		$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['results'][0]['url'].'</h2>'."\n";
 
 		foreach ($status['results'] as $result) {
-			// fixme this should go outside of the div
-			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $result['url'].'</h2>'."\n";
-
 			//if(count($result['results']) > 0) {
-			$output .= format_results_table($result['results']);
+			$output .= format_results_table($result['results'], $result['country']);
 			//}
 		}
 
 		$output .= '</div>'."\n";
-	//	$output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
+		$output .= '<div id="blocked-results-loader"><span>'.__('Trying to load more results', 'wp-blocked').'</span><!-- --></div></div>'."\n";
 		// add permalinks and links for sharing the result on social media
 		$output .= '<p class="permlink">
 			<a href="'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'">'. __("Permalink for this result", 'wp-blocked').'</a><a href="https://twitter.com/home?status='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'+'.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-twitter"></i> '.__('Share on Twitter', 'wp-blocked').'</a><a href="http://facebook.com.com/share.php?t='.__('Check if this website being blocked:', 'wp-blocked').' '. $status['url'] .'&amp;u='.get_permalink($post->ID).'?wp_blocked_url='.$status['url'].'" target="_blank"><i class="fa fa-facebook"></i> '.__('Share on Facebook', 'wp-blocked').'</a>
@@ -105,10 +103,10 @@ function format_results($URL, $fetch_stats=false) {
 }
 
 // create HTML output for status results, result table
-function format_results_table($results) {
+function format_results_table($results, $country = false) {
 	$output .= '<table class="url-results">'."\n";
 	$output .= '<thead><tr>'."\n";
-	if($global === true) $output .= '<th>'.$results['country'].'</th>'."\n";
+	if($country !== false) $output .= '<th>'.__('Country', 'wp-blocked').'</th>'."\n";
 	$output .= '<th>'.__('ISP', 'wp-blocked').'</th><th>'.__('Result', 'wp-blocked').'</th><th>'.__('Last check on', 'wp-blocked').'</th><th>'.__('Last block on', 'wp-blocked').'</th></thead>'."\n";
 	foreach ($results as $result) {
 		// load translations
@@ -129,7 +127,7 @@ function format_results_table($results) {
 
 		// html output
 		$output .= '<tr class="'.$css_class.'">'."\n";
-		if($global === true) $output .= '<td>'.$result['country'].'</td>'."\n";
+		if($country !== false) $output .= '<td>'.$country.'</td>'."\n";
 		$output .= '<td>'.$result['network_name'].'</td>'."\n";
 		$output .= '<td>'.$readable_status.'</td>'."\n";
 		$output .= '<td>'.$last_blocked_timestamp.'</td>'."\n";
@@ -148,7 +146,7 @@ function reload_blocked_results() {
     $status = fetch_results($URL, false);
     if(count($status['results']) > 0) {
         echo "<!-- reloaded URL: ". $status['url'] ." -->";
-        echo format_results_table($status['results'], true);
+        echo format_results_table($status['results']);
     }
     wp_die();
 }
