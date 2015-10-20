@@ -13,11 +13,15 @@ msgstr ""
 "X-Generator: CSL v1.x\n"
 
 #@ wp-blocked
-msgid "blocked"
+msgid "No results"
 msgstr ""
 
 #@ wp-blocked
-msgid "No results"
+msgid "URL format: http://example.com or https://secure.com"
+msgstr ""
+
+#@ wp-blocked
+msgid "blocked"
 msgstr ""
 
 #@ wp-blocked

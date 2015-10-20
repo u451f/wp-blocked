@@ -17,6 +17,10 @@ msgstr ""
 msgid "No results"
 msgstr "Aucun résultat"
 
+#@ wp-blocked
+msgid "URL format: http://example.com or https://secure.com"
+msgstr "Format d'URL : http://exemple.com ou https://securise.com"
+
 # @ wp-blocked
 msgid "blocked"
 msgstr "bloqué"
