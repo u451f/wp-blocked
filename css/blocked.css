@@ -1,4 +1,17 @@
 /*
+ * General styles
+ */
+
+div.error {
+    background: lightpink;
+   border: 1px solid crimson;
+   color: crimson:
+   padding: 0.5em;
+   margin-bottom: 1em;
+   display: block;
+}
+
+/*
  * result loader
  */
 
