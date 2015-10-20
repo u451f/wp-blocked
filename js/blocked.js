@@ -1,13 +1,3 @@
-// verify if a string is a URL, if not add http:// protocol inf ront
-function checkURL(url) {
-    var string = url.value;
-    if (!~string.indexOf("http")){
-        string = "http://" + string;
-    }
-    url.value = string;
-    return url;
-}
-
 jQuery(document).ready(function() {
   // check if we are on the results page
   if(jQuery('#blocked-results').length > 0 && jQuery('#blocked-results div.error').length < 1) {

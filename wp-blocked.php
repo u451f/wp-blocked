@@ -208,8 +208,8 @@ function wp_blocked_url_shortcode() {
 	if(isset($_GET['wp_blocked_url'])) $value = sanitize_url($_GET['wp_blocked_url']);
 	else if(isset($_POST['wp_blocked_url'])) $value = sanitize_url($_POST['wp_blocked_url']);
 
-	$form = '<form class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate autocomplete="on">';
-	$form .= '<input placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" id="wp_blocked_url" name="wp_blocked_url" required onfocusout="checkURL(this)" /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
+	$form = '<form name="wp_blocked_form" class="form wp-blocked-form" method="POST" action="'.get_permalink($options["resultspage_$curLocale"]).'" validate autocomplete="on">';
+	$form .= '<input placeholder="'. __('Test if this URL is blocked', 'wp-blocked').'" type="url" value="'.$value.'" id="wp_blocked_url" name="wp_blocked_url" required pattern="^https?://.+([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$" title="'.__('URL format: http://example.com or https://secure.com', 'wp-blocked').'" /><input type="submit" value="'.__('send', 'wp-blocked').'" class="submit" /></form>';
 	return $form;
 }
 add_shortcode( 'blocked_test_url', 'wp_blocked_url_shortcode' );
