@@ -75,7 +75,8 @@ function format_results($URL, $fetch_stats=false) {
 
 		// we might have a global request
 		if ($status['results'][0]['results']) {
-			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['results'][0]['url'].'</h2>'."\n";
+			$status['url'] = $status['results'][0]['url'];
+			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
 			foreach ($status['results'] as $country) {
 			    $output .= format_results_table($country['results'], $country['country']);
 			}
