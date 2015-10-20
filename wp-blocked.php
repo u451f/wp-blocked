@@ -355,7 +355,7 @@ class wpBlockedSettingsPage {
         );
         add_settings_field(
             'HOST',
-            'HOST URL or IP',
+            'HOST URL or IP (no protocol, no trailing slash, i.e. blocked.example.io)',
             array( $this, 'host_callback' ),
             'wp-blocked-settings',
             'wp_blocked_section_general'
