@@ -3,7 +3,7 @@
 Contributors: veganist, gutschilla 
 Tags: censorship, block, censorship, filtering, monitoring, ooni, openrightsgroup, openinternet
 Requires at least: 3.0
-Tested up to: 4.2.4
+Tested up to: 4.3.1
 Stable tag: v0.3.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
