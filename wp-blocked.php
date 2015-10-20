@@ -3,7 +3,7 @@
 Plugin Name: WP Blocked
 Plugin URI: http://github.com/u451f/wp-blocked
 Description: Wordpress plugin to interact with the Blocked-Middleware by OpenRightsGroup. API credentials can be configured via a settings page.
-Version: 1.0
+Version: 1.1
 Author: Ulrike Uhlig, Martin Gutsch
 Author URI: http://curlybracket.net
 License: GPL3+

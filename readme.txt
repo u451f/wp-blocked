@@ -4,7 +4,7 @@ Contributors: veganist, mgutsch
 Tags: censorship, block, censorship, filtering, monitoring, ooni, openrightsgroup, openinternet
 Requires at least: 3.0
 Tested up to: 4.2.4
-Stable tag: v0.3.2
+Stable tag: v0.3.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Suggests: polylang
@@ -17,6 +17,8 @@ wp-blocked provides a search box and statistics to search for blocked or censore
 The original implementation of Blocking Middleware and PHP is visible on https://blocked.org.uk.
 wp-blocked simply provides a query frontend for Wordpress, but requires to install the Blocked Middleware independently.
 
+API: https://wiki.openrightsgroup.org/wiki/Censorship_Monitoring_Project_API
+
 == Installation ==
 
 1. Unzip and upload `/wp-blocked/` to the `/wp-content/plugins/` directory
@@ -28,6 +30,10 @@ wp-blocked simply provides a query frontend for Wordpress, but requires to insta
 7. In order to display statistics, you can use the [blocked_display_stats] shortcode anywhere on your website.
 
 == Changelog ==
+
+= v0.3.3 =
+
+Results may now be retrieved globally.
 
 = v0.3.2 =
 
