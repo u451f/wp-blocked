@@ -68,23 +68,31 @@ function fetch_results($URL, $fetch_stats=false) {
 function format_results($URL, $fetch_stats=false) {
     $status = fetch_results($URL, $fetch_stats);
 	if($status['success'] == 1) {
+		// this means a general success of the request
 		$output .= '<div id="blocked-results">'."\n";
 		// create table
 		$output .= '<div class="blocked-results-table-wrapper">'."\n";
 		$output .= '<div id="table-results">'."\n";
 
-		// we might have a global request
-		if ($status['results'][0]['results']) {
-			$status['url'] = $status['results'][0]['url'];
-			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
-			foreach ($status['results'] as $country) {
-			    $output .= format_results_table($country['results'], $country['country']);
-			}
-		} else {
-			// or a simple request
-			$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
-			if(count($status['results']) > 0) {
-			    $output .= format_results_table($status['results']);
+		foreach ($status['results'] as $country) {
+			if($country['error']) {
+				$output .= '<div class="error">'.$country['country'].': '.$country['error'].'</div>';
+			} else if($country['success'] == 1 && $country['results']) {
+				if(count($country['results']) > 0) {
+					$status['url'] = $country['results']['url'];
+					$output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
+					// we might have a global request
+					$output .= format_results_table($country['results'], $country['country']);
+				}  else {
+					$output .= '<div class="error">'.$country['country'].': '.__('No results', 'wp-blocked').'</div>';
+				}
+			} else {
+				if(count($country['results']) > 0) {
+			            $output .= '<h2 class="url-searched">'.__("Results for", 'wp-blocked').' '. $status['url'].'</h2>'."\n";
+				    $output .= format_results_table($country);
+				}  else {
+					$output .= '<div class="error">'.$country['country'].': '.__('No results', 'wp-blocked').'</div>';
+				}
 			}
 		}
 
