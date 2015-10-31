@@ -1,4 +1,11 @@
 jQuery(document).ready(function() {
+    // automatically prepend http:// if user did not do it
+    jQuery("#wp_blocked_url").change(function() {
+        if (!/^http:\/\//.test(this.value)) {
+            this.value = "http://" + this.value;
+        }
+   });
+
   // check if we are on the results page
   if(jQuery('#blocked-results').length > 0 && jQuery('#blocked-results div.error').length < 1) {
 	  // if there are no results, we try to reload after n milliseconds.
